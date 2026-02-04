@@ -97,3 +97,7 @@ Route::get('/login', function (){
 Route::get('/dashboard', function (){
     return view ('dashboard');
 });
+
+Route::get('/athorrrrrr', function (){
+    return view ('dashboard');
+});
