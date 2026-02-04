@@ -130,7 +130,7 @@ body{
   </ul>
 
   <ul>
-    <a href="#">
+    <a href="#" onclick="showLogoutModal(event)">
       <li class="logout">
         <i class="bi bi-box-arrow-right"></i> Logout
       </li>
@@ -179,18 +179,6 @@ body{
         </div>
       </div>
     </div>
-
-    <div class="col-md-3">
-      <div class="card p-4">
-        <div class="d-flex justify-content-between">
-          <div>
-            <div class="text-muted">Jumlah Kelas</div>
-            <h3 id="kelas">0</h3>
-          </div>
-          <i class="bi bi-building stat-icon text-warning"></i>
-        </div>
-      </div>
-    </div>
   </div>
 
   <!-- TABLE -->
@@ -212,6 +200,34 @@ body{
   </div>
 </main>
 
+<!-- MODAL LOGOUT -->
+<div class="modal fade" id="logoutModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-exclamation-triangle text-warning"></i>
+          Konfirmasi Logout
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        Apakah kamu yakin ingin logout?
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">
+          Batal
+        </button>
+        <a href="/home" class="btn btn-danger">
+          Ya, Logout
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
 const anggota = [
   {nama:"Raka Pradana",kelas:"X",jurusan:"RPL",jk:"L",status:"Aktif"},
@@ -226,12 +242,10 @@ function loadData(){
 
   let aktif = 0;
   let nonaktif = 0;
-  const kelasSet = new Set();
 
   anggota.forEach((a,i)=>{
     if(a.status === "Aktif") aktif++;
     else nonaktif++;
-    kelasSet.add(a.kelas);
 
     tbody.innerHTML += `
       <tr class="text-center">
@@ -255,7 +269,12 @@ function loadData(){
   document.getElementById("total").textContent = anggota.length;
   document.getElementById("aktif").textContent = aktif;
   document.getElementById("nonaktif").textContent = nonaktif;
-  document.getElementById("kelas").textContent = kelasSet.size;
+}
+
+function showLogoutModal(e){
+  e.preventDefault();
+  const modal = new bootstrap.Modal(document.getElementById("logoutModal"));
+  modal.show();
 }
 
 loadData();

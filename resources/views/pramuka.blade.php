@@ -46,9 +46,7 @@ body{
   margin:20px 0;
 }
 
-.sidebar a{
-  text-decoration:none;
-}
+.sidebar a{ text-decoration:none }
 
 .sidebar li{
   padding:14px 26px;
@@ -130,7 +128,7 @@ body{
   </ul>
 
   <ul>
-    <a href="#">
+    <a href="#" onclick="showLogoutModal(event)">
       <li class="logout">
         <i class="bi bi-box-arrow-right"></i> Logout
       </li>
@@ -172,6 +170,7 @@ body{
         <tr class="text-center">
           <th width="50">No</th>
           <th>Nama Siswa</th>
+          <th width="120">NIPD</th>
           <th width="80">Kelas</th>
           <th width="100">Jurusan</th>
           <th width="90">Nilai</th>
@@ -182,7 +181,7 @@ body{
 
       <tbody id="tbody">
         <tr>
-          <td colspan="7" class="text-center text-muted py-4">
+          <td colspan="8" class="text-center text-muted py-4">
             Pilih kelas dan jurusan terlebih dahulu
           </td>
         </tr>
@@ -197,10 +196,47 @@ body{
   </div>
 </main>
 
+<!-- MODAL LOGOUT -->
+<div class="modal fade" id="logoutModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-exclamation-triangle text-warning"></i>
+          Konfirmasi Logout
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        Apakah kamu yakin ingin logout?
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">
+          Batal
+        </button>
+        <a href="/home" class="btn btn-danger">
+          Ya, Logout
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
 const dataSiswa = {
-  X:{ RPL:["Raka Pradana","Kevin Saputra"] },
-  XI:{ DKV:["Citra Lestari"] }
+  X:{
+    RPL:[
+      { nipd:"231001", nama:"Raka Pradana" },
+      { nipd:"231002", nama:"Kevin Saputra" }
+    ]
+  },
+  XI:{
+    DKV:[
+      { nipd:"221015", nama:"Citra Lestari" }
+    ]
+  }
 };
 
 const kelas = document.getElementById("kelas");
@@ -221,18 +257,19 @@ function loadSiswa(){
   if(!siswa){
     tbody.innerHTML = `
       <tr>
-        <td colspan="7" class="text-center text-muted py-4">
+        <td colspan="8" class="text-center text-muted py-4">
           Data siswa belum tersedia
         </td>
       </tr>`;
     return;
   }
 
-  siswa.forEach((nama,i)=>{
+  siswa.forEach((s,i)=>{
     tbody.innerHTML += `
       <tr>
         <td class="text-center">${i+1}</td>
-        <td>${nama}</td>
+        <td>${s.nama}</td>
+        <td class="text-center">${s.nipd}</td>
         <td class="text-center">${kelas.value}</td>
         <td class="text-center">${jurusan.value}</td>
         <td>
@@ -243,8 +280,7 @@ function loadSiswa(){
         </td>
         <td class="text-center predikat">-</td>
         <td>
-          <textarea class="form-control"
-            rows="2"
+          <textarea class="form-control" rows="2"
             placeholder="Tulis deskripsi penilaian..."></textarea>
         </td>
       </tr>`;
@@ -259,6 +295,12 @@ function updatePredikat(input){
 
 function simpan(){
   alert("Penilaian berhasil disimpan ✅");
+}
+
+function showLogoutModal(e){
+  e.preventDefault();
+  const modal = new bootstrap.Modal(document.getElementById("logoutModal"));
+  modal.show();
 }
 
 kelas.addEventListener("change", loadSiswa);

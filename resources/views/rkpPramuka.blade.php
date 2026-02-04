@@ -107,9 +107,35 @@ body{
   color:#fff;
 }
 
+/* ===== PRINT MODE ===== */
 @media print{
-  .sidebar,.btn{display:none}
-  .main{margin:0;padding:0}
+  .sidebar,
+  .no-print,
+  .btn{
+    display:none !important;
+  }
+
+  body{
+    background:#fff;
+  }
+
+  .main{
+    margin:0;
+    padding:20px;
+  }
+
+  .card{
+    box-shadow:none;
+    border:none;
+    padding:0;
+  }
+
+  #infoKelas{
+    font-size:16px;
+    font-weight:600;
+    margin-bottom:12px;
+    color:#000;
+  }
 }
 </style>
 </head>
@@ -142,7 +168,7 @@ body{
 
   <ul>
     <li class="logout">
-      <a href="/logout" class="menu-link">
+      <a href="#" class="menu-link">
         <i class="bi bi-box-arrow-right"></i> Logout
       </a>
     </li>
@@ -154,8 +180,8 @@ body{
 
 <div class="page-title">Rekap Nilai Ekstrakurikuler Pramuka</div>
 
-<!-- FILTER AUTO -->
-<div class="card p-4 mb-4">
+<!-- FILTER (HILANG SAAT PRINT) -->
+<div class="card p-4 mb-4 no-print">
   <div class="row g-3">
     <div class="col-md-6">
       <label>Kelas</label>
@@ -181,6 +207,7 @@ body{
   </div>
 </div>
 
+<!-- INFO KELAS (MUNCUL DI PRINT) -->
 <div id="infoKelas" class="mb-3 fw-semibold text-muted"></div>
 
 <!-- TABLE -->
@@ -205,7 +232,7 @@ body{
 </tbody>
 </table>
 
-<div class="text-end mt-3">
+<div class="text-end mt-3 no-print">
   <button onclick="window.print()" class="btn btn-outline-secondary">
     <i class="bi bi-printer"></i> Print Rekap
   </button>
@@ -214,21 +241,23 @@ body{
 
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
 const dataRekap={
 X:{
-"RPL":[
-{nama:"Raka Pradana",nipd:"X001",nilai:"A",ket:"Sangat aktif"},
-{nama:"Kevin Saputra",nipd:"X002",nilai:"B",ket:"Aktif"}
-],
-"BIDI 1":[
-{nama:"Ahmad Fauzi",nipd:"X003",nilai:"A",ket:"Disiplin"}
-]
+  "RPL":[
+    {nama:"Raka Pradana",nipd:"X001",nilai:"A",ket:"Sangat aktif"},
+    {nama:"Kevin Saputra",nipd:"X002",nilai:"B",ket:"Aktif"}
+  ],
+  "BIDI 1":[
+    {nama:"Ahmad Fauzi",nipd:"X003",nilai:"A",ket:"Disiplin"}
+  ]
 },
 XI:{
-"DKV":[
-{nama:"Citra Lestari",nipd:"XI001",nilai:"A",ket:"Kreatif"}
-]
+  "DKV":[
+    {nama:"Citra Lestari",nipd:"XI001",nilai:"A",ket:"Kreatif"}
+  ]
 }
 };
 
@@ -238,28 +267,28 @@ const tbody=document.getElementById("tbody");
 const info=document.getElementById("infoKelas");
 
 function loadRekap(){
-tbody.innerHTML="";
-info.innerHTML="";
+  tbody.innerHTML="";
+  info.innerHTML="";
 
-const list=dataRekap[kelas.value]?.[rombel.value];
-if(!list){
-tbody.innerHTML=`<tr><td colspan="6" class="text-center text-muted py-4">Data belum tersedia</td></tr>`;
-return;
-}
+  const list=dataRekap[kelas.value]?.[rombel.value];
+  if(!list){
+    tbody.innerHTML=`<tr><td colspan="6" class="text-center text-muted py-4">Data belum tersedia</td></tr>`;
+    return;
+  }
 
-info.innerHTML=`Kelas ${kelas.value} – ${rombel.value}`;
+  info.innerHTML=`Kelas ${kelas.value} – ${rombel.value}`;
 
-list.forEach((s,i)=>{
-tbody.innerHTML+=`
-<tr>
-<td>${i+1}</td>
-<td>${s.nama}</td>
-<td>${s.nipd}</td>
-<td>PRAMUKA</td>
-<td><b>${s.nilai}</b></td>
-<td>${s.ket}</td>
-</tr>`;
-});
+  list.forEach((s,i)=>{
+    tbody.innerHTML+=`
+      <tr>
+        <td>${i+1}</td>
+        <td>${s.nama}</td>
+        <td>${s.nipd}</td>
+        <td>PRAMUKA</td>
+        <td><b>${s.nilai}</b></td>
+        <td>${s.ket}</td>
+      </tr>`;
+  });
 }
 
 kelas.addEventListener("change",loadRekap);
@@ -268,4 +297,3 @@ rombel.addEventListener("change",loadRekap);
 
 </body>
 </html>
- 
