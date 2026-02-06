@@ -22,8 +22,8 @@ class KegiatanController extends Controller
         return view ('gin');
     }
 
-    function pramuka(){
-        return view ('pramuka');
+    function eskul(){
+        return view ('eskul');
     }
 
 

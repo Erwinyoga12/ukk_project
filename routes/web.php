@@ -72,7 +72,7 @@ Route::get('/prmkrekap ',[KegiatanController::class, 'rkpPramuka']);
 
 Route::get('/gotapramu ',[KegiatanController::class, 'gotapramuka']);
 
-Route::get('/pramuka ',[KegiatanController::class, 'pramuka']);
+Route::get('/eskul ',[KegiatanController::class, 'eskul']);
 
 Route::get('/contact',[ContactController::class, 'con'])->name('contact.index');
 

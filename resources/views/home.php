@@ -180,7 +180,12 @@ body{
 <div class="container">
 <h1>Penilaian Ekstrakurikuler</h1>
 <p>Platform profesional untuk mengelola kegiatan dan penilaian ekstrakurikuler siswa.</p>
-<a href="#eskul" class="btn-main">Lihat Kegiatan</a>
+
+<div style="display:flex; flex-direction:column; align-items:center;">
+    <a href="gin" class="btn-main">Input Nilai</a>
+    <a href="#eskul">Lihat Kegiatan</a>
+</div>
+
 </div>
 </section>
 
@@ -202,8 +207,6 @@ body{
         <div class="col-lg-4">
             <div class="demo-card">
                 <img src="image/kib.jpg">
-                <div class="overlay"></div>
-                <a href="gin" class="demo-btn">MASUK</a>
                 <div class="label">ESKUL PASKIBRA</div>
             </div>
         </div>
@@ -211,8 +214,6 @@ body{
         <div class="col-lg-4">
             <div class="demo-card">
                 <img src="image/prmuka.jpg">
-                <div class="overlay"></div>
-                <a href="gin" class="demo-btn">MASUK</a>
                 <div class="label">ESKUL PRAMUKA</div>
             </div>
         </div>
@@ -220,8 +221,6 @@ body{
         <div class="col-lg-4">
             <div class="demo-card">
                 <img src="image/pmr.jpg">
-                <div class="overlay"></div>
-                <a href="gin" class="demo-btn">MASUK</a>
                 <div class="label">ESKUL PMR</div>
             </div>
         </div>
@@ -229,8 +228,6 @@ body{
         <div class="col-lg-4">
             <div class="demo-card">
                 <img src="image/drm.jpg">
-                <div class="overlay"></div>
-                <a href="gin" class="demo-btn">MASUK</a>
                 <div class="label">ESKUL DRUMBAND</div>
             </div>
         </div>
@@ -238,8 +235,6 @@ body{
         <div class="col-lg-4">
             <div class="demo-card">
                 <img src="image/nat.jpg">
-                <div class="overlay"></div>
-                <a href="gin" class="demo-btn">MASUK</a>
                 <div class="label">ESKUL NATBINARI</div>
             </div>
         </div>
@@ -247,9 +242,49 @@ body{
         <div class="col-lg-4">
             <div class="demo-card">
                 <img src="image/jrnl.jpg">
-                <div class="overlay"></div>
-                <a href="gin" class="demo-btn">MASUK</a>
                 <div class="label">ESKUL JURNALISTIK</div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="demo-card">
+                <img src="image/pencak.jpg">
+                <div class="label">ESKUL PENCAK SILAT</div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="demo-card">
+                <img src="image/tari.jpg">
+                <div class="label">ESKUL SENI TARI</div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="demo-card">
+                <img src="image/hadroh.jpg">
+                <div class="label">ESKUL HADROH</div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="demo-card">
+                <img src="image/bdmin.jpg">
+                <div class="label">ESKUL BADMINTON</div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="demo-card">
+                <img src="image/ftsl.jpg">
+                <div class="label">ESKUL FUTSAL</div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="demo-card">
+                <img src="image/vly.jpg">
+                <div class="label">ESKUL VOLY</div>
             </div>
         </div>
 

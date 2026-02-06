@@ -231,7 +231,7 @@ input:focus{
         </div>
 
         <button class="btn">Log in</button><br>
-        <a href="/pramuka" class="forgot">Forgot Password</a>
+        <a href="/eskul" class="forgot">Forgot Password</a>
     </form>
 </div>
 

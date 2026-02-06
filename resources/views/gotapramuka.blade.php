@@ -148,7 +148,7 @@ body{
       <div class="card p-4">
         <div class="d-flex justify-content-between">
           <div>
-            <div class="text-muted">Total Anggota</div>
+            <div class="text-muted">eskul</div>
             <h3 id="total">0</h3>
           </div>
           <i class="bi bi-people stat-icon text-primary"></i>
