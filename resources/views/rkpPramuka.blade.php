@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Rekap Nilai Pramuka</title>
+<title>Rekap Nilai Eskul</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -40,60 +40,36 @@ body{
   color:#fff;
 }
 
-.sidebar ul{list-style:none;padding:0;margin:20px 0}
+.sidebar ul{
+  list-style:none;
+  padding:0;
+  margin:16px 0;
+}
 
 .sidebar li{
-  position:relative;
   padding:14px 26px;
-  color:#eafffd;
-  transition:.25s;
-}
-
-.sidebar li::before{
-  content:"";
-  position:absolute;
-  left:0;top:0;
-  width:4px;height:100%;
-  background:#fff;
-  opacity:0;
-}
-
-.sidebar li:hover{
-  background:rgba(255,255,255,.22);
-  padding-left:32px;
+  display:flex;
+  gap:12px;
+  align-items:center;
+  color:#eaf2ff;
+  cursor:pointer;
 }
 
 .sidebar li.active{
-  background:rgba(255,255,255,.28);
+  background:rgba(255,255,255,.3);
+  border-left:4px solid #fff;
   font-weight:600;
-}
-
-.sidebar li.active::before{opacity:1}
-
-.menu-link{
-  text-decoration:none;
-  color:inherit;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  width:100%;
 }
 
 .sidebar .logout{
   margin-top:auto;
-  background:rgba(0,0,0,.1);
+  background:rgba(0,0,0,.2);
 }
 
 /* ===== MAIN ===== */
 .main{
   margin-left:260px;
   padding:32px;
-}
-
-.page-title{
-  font-size:22px;
-  font-weight:600;
-  margin-bottom:22px;
 }
 
 .card{
@@ -107,34 +83,36 @@ body{
   color:#fff;
 }
 
+/* ===== BUTTON ===== */
+.btn-cetak{
+  background:var(--primary);
+  color:#fff;
+  border:none;
+  padding:10px 22px;
+  border-radius:30px;
+  font-weight:600;
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+}
+
+.btn-cetak:hover{
+  background:var(--primary-dark);
+}
+
 /* ===== PRINT MODE ===== */
 @media print{
-  .sidebar,
-  .no-print,
-  .btn{
-    display:none !important;
-  }
-
   body{
     background:#fff;
   }
-
+  .sidebar,
+  .no-print,
+  .btn-cetak{
+    display:none !important;
+  }
   .main{
     margin:0;
-    padding:20px;
-  }
-
-  .card{
-    box-shadow:none;
-    border:none;
     padding:0;
-  }
-
-  #infoKelas{
-    font-size:16px;
-    font-weight:600;
-    margin-bottom:12px;
-    color:#000;
   }
 }
 </style>
@@ -144,80 +122,69 @@ body{
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
-  <div class="sidebar-header">PRAMUKA</div>
-
+  <div class="sidebar-header" id="eskulTitle">ESKUL</div>
   <ul>
-    <li>
-      <a href="/pramuka" class="menu-link">
-        <i class="bi bi-pencil-square"></i> Penilaian
-      </a>
+    <li onclick="location.href='/eskul'">
+      <i class="bi bi-pencil-square"></i> Penilaian
     </li>
-
     <li class="active">
-      <a href="/prmkrekap" class="menu-link">
-        <i class="bi bi-bar-chart"></i> Rekap Nilai
-      </a>
-    </li>
-
-    <li>
-      <a href="/gotapramu" class="menu-link">
-        <i class="bi bi-people"></i> Anggota
-      </a>
+      <i class="bi bi-bar-chart"></i> Rekap Penilaian
     </li>
   </ul>
-
   <ul>
-    <li class="logout">
-      <a href="#" class="menu-link">
-        <i class="bi bi-box-arrow-right"></i> Logout
-      </a>
+    <li class="logout" onclick="logout()">
+      <i class="bi bi-box-arrow-right"></i> Logout
     </li>
   </ul>
 </aside>
 
 <!-- MAIN -->
-<main class="main">
+<div class="main">
 
-<div class="page-title">Rekap Nilai Ekstrakurikuler Pramuka</div>
+<h4 class="fw-bold">Rekap Nilai Ekstrakurikuler</h4>
+<p class="text-muted no-print">Laporan nilai peserta didik</p>
 
-<!-- FILTER (HILANG SAAT PRINT) -->
-<div class="card p-4 mb-4 no-print">
+<!-- FILTER -->
+<div class="card p-3 mb-3 no-print">
   <div class="row g-3">
-    <div class="col-md-6">
+    <div class="col-md-4">
+      <label>Eskul</label>
+      <select id="eskul" class="form-select" disabled></select>
+    </div>
+    <div class="col-md-4">
       <label>Kelas</label>
       <select id="kelas" class="form-select">
-        <option value="">Pilih Kelas</option>
+        <option value="">Pilih</option>
         <option value="X">X</option>
         <option value="XI">XI</option>
       </select>
     </div>
-    <div class="col-md-6">
-      <label>Jurusan / Rombel</label>
-      <select id="rombel" class="form-select">
-        <option value="">Pilih Jurusan</option>
-        <option>BIDI 1</option>
-        <option>BIDI 2</option>
-        <option>BIDI 3</option>
+    <div class="col-md-4">
+      <label>Jurusan</label>
+      <select id="jurusan" class="form-select">
+        <option value="">Semua</option>
         <option>RPL</option>
-        <option>TKJ 1</option>
-        <option>TKJ 2</option>
+        <option>TKJ</option>
         <option>DKV</option>
+        <option>BIDI</option>
       </select>
     </div>
   </div>
 </div>
 
-<!-- INFO KELAS (MUNCUL DI PRINT) -->
-<div id="infoKelas" class="mb-3 fw-semibold text-muted"></div>
+<!-- INFO CETAK -->
+<h5 id="infoCetak" class="fw-bold mb-3"></h5>
 
 <!-- TABLE -->
-<div class="card p-4">
+<div class="card p-3">
 <table class="table table-bordered">
 <thead>
 <tr>
   <th>No</th>
-  <th>Nama Siswa</th>
+  <th>Nama</th>
   <th>NIPD</th>
+  <th>Kelas</th>
+  <th>Jurusan</th>
   <th>Eskul</th>
   <th>Nilai</th>
   <th>Keterangan</th>
@@ -225,74 +192,93 @@ body{
 </thead>
 <tbody id="tbody">
 <tr>
-  <td colspan="6" class="text-center text-muted py-4">
-    Pilih kelas dan jurusan
+  <td colspan="8" class="text-center text-muted">
+    Pilih kelas dulu
   </td>
 </tr>
 </tbody>
 </table>
 
-<div class="text-end mt-3 no-print">
-  <button onclick="window.print()" class="btn btn-outline-secondary">
-    <i class="bi bi-printer"></i> Print Rekap
-  </button>
-</div>
+<button onclick="cetak()" class="btn-cetak no-print">
+  <i class="bi bi-printer"></i> Cetak
+</button>
 </div>
 
-</main>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</div>
 
 <script>
-const dataRekap={
-X:{
-  "RPL":[
-    {nama:"Raka Pradana",nipd:"X001",nilai:"A",ket:"Sangat aktif"},
-    {nama:"Kevin Saputra",nipd:"X002",nilai:"B",ket:"Aktif"}
-  ],
-  "BIDI 1":[
-    {nama:"Ahmad Fauzi",nipd:"X003",nilai:"A",ket:"Disiplin"}
-  ]
-},
-XI:{
-  "DKV":[
-    {nama:"Citra Lestari",nipd:"XI001",nilai:"A",ket:"Kreatif"}
-  ]
-}
+const eskulLogin = (localStorage.getItem("eskul_login") || "PRAMUKA").toUpperCase();
+document.getElementById("eskulTitle").innerText = eskulLogin;
+document.getElementById("eskul").innerHTML = `<option>${eskulLogin}</option>`;
+
+const kelas = document.getElementById("kelas");
+const jurusan = document.getElementById("jurusan");
+const tbody = document.getElementById("tbody");
+const infoCetak = document.getElementById("infoCetak");
+
+const data = {
+  PRAMUKA:{
+    X:[
+      {nama:"Raka",nipd:"001",jurusan:"RPL",nilai:"A",ket:"Aktif"},
+      {nama:"Bima",nipd:"002",jurusan:"TKJ",nilai:"B",ket:"Baik"}
+    ],
+    XI:[
+      {nama:"Dimas",nipd:"003",jurusan:"DKV",nilai:"A",ket:"Disiplin"}
+    ]
+  }
 };
 
-const kelas=document.getElementById("kelas");
-const rombel=document.getElementById("rombel");
-const tbody=document.getElementById("tbody");
-const info=document.getElementById("infoKelas");
-
-function loadRekap(){
+function render(){
   tbody.innerHTML="";
-  info.innerHTML="";
+  const list = (data[eskulLogin]?.[kelas.value]) || [];
+  const filterJurusan = jurusan.value;
 
-  const list=dataRekap[kelas.value]?.[rombel.value];
-  if(!list){
-    tbody.innerHTML=`<tr><td colspan="6" class="text-center text-muted py-4">Data belum tersedia</td></tr>`;
+  const hasil = filterJurusan
+    ? list.filter(d=>d.jurusan===filterJurusan)
+    : list;
+
+  if(!kelas.value || hasil.length===0){
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="8" class="text-center text-muted">
+          Data kosong
+        </td>
+      </tr>`;
     return;
   }
 
-  info.innerHTML=`Kelas ${kelas.value} – ${rombel.value}`;
+  infoCetak.innerText = `Rekap Nilai Eskul ${eskulLogin} - Kelas ${kelas.value} ${filterJurusan ? "- Jurusan "+filterJurusan : ""}`;
 
-  list.forEach((s,i)=>{
-    tbody.innerHTML+=`
+  hasil.forEach((s,i)=>{
+    tbody.innerHTML += `
       <tr>
         <td>${i+1}</td>
         <td>${s.nama}</td>
         <td>${s.nipd}</td>
-        <td>PRAMUKA</td>
-        <td><b>${s.nilai}</b></td>
+        <td>${kelas.value}</td>
+        <td>${s.jurusan}</td>
+        <td>${eskulLogin}</td>
+        <td>${s.nilai}</td>
         <td>${s.ket}</td>
       </tr>`;
   });
 }
 
-kelas.addEventListener("change",loadRekap);
-rombel.addEventListener("change",loadRekap);
+kelas.onchange = render;
+jurusan.onchange = render;
+
+function cetak(){
+  if(!kelas.value){
+    alert("Pilih kelas dulu!");
+    return;
+  }
+  window.print();
+}
+
+function logout(){
+  localStorage.removeItem("eskul_login");
+  location.href="login.html";
+}
 </script>
 
 </body>

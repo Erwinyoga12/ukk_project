@@ -5,6 +5,7 @@
 <title>Penilaian Ekstrakurikuler</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<!-- Bootstrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
@@ -21,6 +22,7 @@ body{
   background:var(--bg);
 }
 
+/* ===== SIDEBAR ===== */
 .sidebar{
   width:260px;
   height:100vh;
@@ -45,12 +47,23 @@ body{
   margin:20px 0;
 }
 
+.sidebar a{
+  text-decoration:none;
+  color:inherit;
+}
+
 .sidebar li{
   padding:14px 26px;
   display:flex;
   gap:12px;
   align-items:center;
   color:#eaf2ff;
+  transition:.2s;
+  cursor:pointer;
+}
+
+.sidebar li:hover{
+  background:rgba(255,255,255,.15);
 }
 
 .sidebar li.active{
@@ -59,15 +72,15 @@ body{
   border-left:4px solid #fff;
 }
 
+.sidebar .logout{
+  margin-top:auto;
+  background:rgba(0,0,0,.2);
+}
+
+/* ===== MAIN ===== */
 .main{
   margin-left:260px;
   padding:32px;
-}
-
-.page-title{
-  font-size:22px;
-  font-weight:600;
-  margin-bottom:24px;
 }
 
 .card{
@@ -85,36 +98,38 @@ body{
 
 <body>
 
-<!-- SIDEBAR -->
+<!-- ===== SIDEBAR ===== -->
 <aside class="sidebar">
-  <div class="sidebar-header">Eskul</div>
+  <div class="sidebar-header" id="eskulTitle">ESKUL</div>
+
   <ul>
-    <li class="active"><i class="bi bi-pencil-square"></i> Penilaian</li>
-    <li><i class="bi bi-bar-chart"></i> Rekap Nilai</li>
-    <li><i class="bi bi-people"></i> Anggota</li>
+    <li class="active">
+      <i class="bi bi-pencil-square"></i> Penilaian
+    </li>
+    <li onclick="location.href='/prmkrekap'">
+      <i class="bi bi-bar-chart"></i> Rekap Penilaian
+    </li>
+  </ul>
+
+  <ul>
+    <li class="logout" onclick="logout()">
+      <i class="bi bi-box-arrow-right"></i> Logout
+    </li>
   </ul>
 </aside>
 
-<!-- MAIN -->
+<!-- ===== MAIN ===== -->
 <main class="main">
-  <div class="page-title">Penilaian Ekstrakurikuler</div>
 
   <!-- FILTER -->
   <div class="card p-4 mb-4">
     <div class="row g-3">
       <div class="col-md-6">
-        <label class="fw-semibold">Eskul</label>
-        <select id="eskul" class="form-select">
-          <option value="">Pilih Eskul</option>
-          <option value="pramuka">Pramuka</option>
-          <option value="paskibra">Paskibra</option>
-          <option value="pmr">PMR</option>
-          <option value="natbinari">Natbinari</option>
-          <option value="jurnal">Jurnal</option>
-        </select>
+        <label class="form-label">Eskul</label>
+        <select id="eskul" class="form-select" disabled></select>
       </div>
       <div class="col-md-6">
-        <label class="fw-semibold">Kelas</label>
+        <label class="form-label">Kelas</label>
         <select id="kelas" class="form-select">
           <option value="">Pilih Kelas</option>
           <option value="X">X</option>
@@ -126,133 +141,124 @@ body{
 
   <!-- TABLE -->
   <div class="card p-4">
-    <table class="table table-bordered">
+    <table class="table table-bordered align-middle">
       <thead>
         <tr class="text-center">
-          <th width="50">No</th>
-          <th>Nama Siswa</th>
-          <th width="120">NIPD</th>
-          <th width="120">Jurusan</th>
-          <th width="100">Nilai</th>
-          <th width="90">Predikat</th>
-          <th>Deskripsi Penilaian</th>
+          <th>No</th>
+          <th>Nama</th>
+          <th>NIPD</th>
+          <th>Jurusan</th>
+          <th>Nilai</th>
+          <th>Predikat</th>
+          <th>Deskripsi</th>
         </tr>
       </thead>
       <tbody id="tbody">
         <tr>
-          <td colspan="7" class="text-center text-muted py-4">
-            Pilih eskul dan kelas terlebih dahulu
+          <td colspan="7" class="text-center text-muted">
+            Pilih kelas terlebih dahulu
           </td>
         </tr>
       </tbody>
     </table>
   </div>
+
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
-const dataSiswa = {
-  pramuka:{
-    X:[
-      {nipd:"231001", nama:"Raka Pradana", jurusan:"RPL"},
-      {nipd:"231002", nama:"Alya Putri", jurusan:"DKV"}
-    ],
-    XI:[
-      {nipd:"221001", nama:"Kevin Saputra", jurusan:"RPL"},
-      {nipd:"221002", nama:"Nadia Putri", jurusan:"DKV"}
-    ]
-  },
-  paskibra:{
-    X:[
-      {nipd:"231010", nama:"Bima Aditya", jurusan:"TKJ"},
-      {nipd:"231011", nama:"Salsa Anindya", jurusan:"RPL"}
-    ],
-    XI:[
-      {nipd:"221010", nama:"Dimas Prakoso", jurusan:"TKJ"},
-      {nipd:"221011", nama:"Putri Lestari", jurusan:"DKV"}
-    ]
-  },
-  pmr:{
-    X:[
-      {nipd:"231020", nama:"Farhan Akbar", jurusan:"RPL"},
-      {nipd:"231021", nama:"Nisa Rahma", jurusan:"DKV"}
-    ],
-    XI:[
-      {nipd:"221020", nama:"Citra Lestari", jurusan:"RPL"},
-      {nipd:"221021", nama:"Ilham Fauzi", jurusan:"TKJ"}
-    ]
-  },
-  natbinari:{
-    X:[
-      {nipd:"231030", nama:"Yoga Pratama", jurusan:"TKJ"},
-      {nipd:"231031", nama:"Rani Oktavia", jurusan:"DKV"}
-    ],
-    XI:[
-      {nipd:"221030", nama:"Alif Ramadhan", jurusan:"RPL"},
-      {nipd:"221031", nama:"Siti Aminah", jurusan:"DKV"}
-    ]
-  },
-  jurnal:{
-    X:[
-      {nipd:"231040", nama:"Bagas Setiawan", jurusan:"RPL"},
-      {nipd:"231041", nama:"Dewi Sartika", jurusan:"DKV"}
-    ],
-    XI:[
-      {nipd:"221040", nama:"Fajar Nugroho", jurusan:"TKJ"},
-      {nipd:"221041", nama:"Maya Salsabila", jurusan:"RPL"}
-    ]
-  }
-};
-
-const eskul = document.getElementById("eskul");
-const kelas = document.getElementById("kelas");
+/* ==========================
+   AUTH & INIT
+========================== */
+const eskulSelect = document.getElementById("eskul");
+const kelasSelect = document.getElementById("kelas");
 const tbody = document.getElementById("tbody");
+const eskulTitle = document.getElementById("eskulTitle");
 
-function getPredikat(nilai){
-  if(nilai >= 90) return "A";
-  if(nilai >= 75) return "B";
-  if(nilai >= 10) return "C";
-  return "-";
+const eskulLogin = localStorage.getItem("eskul_login");
+if(!eskulLogin){
+  location.href = "login.html";
 }
 
-function loadSiswa(){
-  tbody.innerHTML = "";
-  const siswa = dataSiswa[eskul.value]?.[kelas.value];
+eskulSelect.innerHTML = `<option value="${eskulLogin}">${eskulLogin}</option>`;
+eskulTitle.innerText = eskulLogin.toUpperCase();
 
-  if(!siswa){
+/* ==========================
+   DATA DUMMY (SIMULASI DB)
+========================== */
+const dataSiswa = {
+  X: [
+    {nama:"Andi", nipd:"12345", jurusan:"RPL"},
+    {nama:"Budi", nipd:"12346", jurusan:"TKJ"}
+  ],
+  XI: [
+    {nama:"Siti", nipd:"22345", jurusan:"RPL"},
+    {nama:"Dina", nipd:"22346", jurusan:"DKV"}
+  ]
+};
+
+/* ==========================
+   FUNCTION
+========================== */
+function getPredikat(nilai){
+  if(nilai >= 90) return "A";
+  if(nilai >= 80) return "B";
+  if(nilai >= 70) return "C";
+  return "D";
+}
+
+function renderTable(kelas){
+  tbody.innerHTML = "";
+
+  if(!dataSiswa[kelas]){
     tbody.innerHTML = `
       <tr>
-        <td colspan="7" class="text-center text-muted py-4">
-          Data siswa belum tersedia
+        <td colspan="7" class="text-center text-muted">
+          Data tidak tersedia
         </td>
       </tr>`;
     return;
   }
 
-  siswa.forEach((s,i)=>{
+  dataSiswa[kelas].forEach((siswa, i)=>{
     tbody.innerHTML += `
       <tr>
         <td class="text-center">${i+1}</td>
-        <td>${s.nama}</td>
-        <td class="text-center">${s.nipd}</td>
-        <td class="text-center">${s.jurusan}</td>
+        <td>${siswa.nama}</td>
+        <td>${siswa.nipd}</td>
+        <td>${siswa.jurusan}</td>
         <td>
-          <input type="number" min="10" max="100"
-            class="form-control text-center"
-            oninput="this.parentElement.nextElementSibling.textContent=getPredikat(this.value)">
+          <input type="number" class="form-control nilai" min="0" max="100">
         </td>
-        <td class="text-center">-</td>
+        <td class="predikat text-center">-</td>
         <td>
-          <textarea class="form-control" rows="2"
-            placeholder="Tulis deskripsi penilaian..."></textarea>
+          <input type="text" class="form-control" placeholder="Deskripsi">
         </td>
-      </tr>`;
+      </tr>
+    `;
+  });
+
+  document.querySelectorAll(".nilai").forEach(input=>{
+    input.addEventListener("input", e=>{
+      const nilai = e.target.value;
+      const predikat = e.target.closest("tr").querySelector(".predikat");
+      predikat.innerText = nilai ? getPredikat(nilai) : "-";
+    });
   });
 }
 
-eskul.addEventListener("change", loadSiswa);
-kelas.addEventListener("change", loadSiswa);
+/* ==========================
+   EVENT
+========================== */
+kelasSelect.addEventListener("change", ()=>{
+  if(kelasSelect.value){
+    renderTable(kelasSelect.value);
+  }
+});
+
+function logout(){
+  localStorage.removeItem("eskul_login");
+  location.href = "login.html";
+}
 </script>
 
 </body>

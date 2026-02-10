@@ -112,7 +112,7 @@ body{
   <div class="sidebar-header">PRAMUKA</div>
 
   <ul>
-    <a href="/pramuka">
+    <a href="/eskul">
       <li>
         <i class="bi bi-pencil-square"></i> Penilaian
       </li>
