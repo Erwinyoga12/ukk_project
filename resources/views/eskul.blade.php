@@ -41,15 +41,16 @@ body{
   color:#fff;
 }
 
+.sidebar-menu{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
+
 .sidebar ul{
   list-style:none;
   padding:0;
-  margin:20px 0;
-}
-
-.sidebar a{
-  text-decoration:none;
-  color:inherit;
+  margin:16px 0;
 }
 
 .sidebar li{
@@ -80,15 +81,34 @@ body{
 /* ===== MAIN ===== */
 .main{
   margin-left:260px;
-  padding:32px;
+  padding:28px;
 }
 
+/* ===== TOPBAR ===== */
+.topbar{
+  background:#fff;
+  padding:16px 20px;
+  border-radius:14px;
+  box-shadow:0 8px 24px rgba(0,0,0,.06);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:24px;
+}
+
+.topbar h4{
+  margin:0;
+  font-weight:600;
+}
+
+/* ===== CARD ===== */
 .card{
   border:none;
   border-radius:14px;
   box-shadow:0 10px 28px rgba(0,0,0,.06);
 }
 
+/* ===== TABLE ===== */
 .table thead{
   background:var(--primary-dark);
   color:#fff;
@@ -102,33 +122,44 @@ body{
 <aside class="sidebar">
   <div class="sidebar-header" id="eskulTitle">ESKUL</div>
 
-  <ul>
-    <li class="active">
-      <i class="bi bi-pencil-square"></i> Penilaian
-    </li>
-    <li onclick="location.href='/prmkrekap'">
-      <i class="bi bi-bar-chart"></i> Rekap Penilaian
-    </li>
-  </ul>
+  <div class="sidebar-menu">
+    <ul>
+      <li class="active">
+        <i class="bi bi-pencil-square"></i> Penilaian
+      </li>
+      <li onclick="location.href='/prmkrekap'">
+        <i class="bi bi-bar-chart"></i> Rekap Penilaian
+      </li>
+    </ul>
 
-  <ul>
-    <li class="logout" onclick="logout()">
-      <i class="bi bi-box-arrow-right"></i> Logout
-    </li>
-  </ul>
+    <ul>
+      <!-- LOGOUT pakai MODAL -->
+      <li class="logout" data-bs-toggle="modal" data-bs-target="#modalLogout">
+        <i class="bi bi-box-arrow-right"></i> Logout
+      </li>
+    </ul>
+  </div>
 </aside>
 
 <!-- ===== MAIN ===== -->
 <main class="main">
 
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <h4>Penilaian Ekstrakurikuler</h4>
+      <small class="text-muted" id="subTitle">Silakan pilih kelas untuk mulai menilai</small>
+    </div>
+  </div>
+
   <!-- FILTER -->
   <div class="card p-4 mb-4">
-    <div class="row g-3">
-      <div class="col-md-6">
+    <div class="row g-3 align-items-end">
+      <div class="col-md-5">
         <label class="form-label">Eskul</label>
         <select id="eskul" class="form-select" disabled></select>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-5">
         <label class="form-label">Kelas</label>
         <select id="kelas" class="form-select">
           <option value="">Pilih Kelas</option>
@@ -136,34 +167,69 @@ body{
           <option value="XI">XI</option>
         </select>
       </div>
+      <div class="col-md-2 d-grid">
+        <button id="btnSimpan" class="btn btn-success">
+          <i class="bi bi-save"></i> Simpan
+        </button>
+      </div>
     </div>
   </div>
 
+  <!-- ALERT -->
+  <div id="alertBox"></div>
+
   <!-- TABLE -->
   <div class="card p-4">
-    <table class="table table-bordered align-middle">
-      <thead>
-        <tr class="text-center">
-          <th>No</th>
-          <th>Nama</th>
-          <th>NIPD</th>
-          <th>Jurusan</th>
-          <th>Nilai</th>
-          <th>Predikat</th>
-          <th>Deskripsi</th>
-        </tr>
-      </thead>
-      <tbody id="tbody">
-        <tr>
-          <td colspan="7" class="text-center text-muted">
-            Pilih kelas terlebih dahulu
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle">
+        <thead>
+          <tr class="text-center">
+            <th>No</th>
+            <th>Nama</th>
+            <th>NIPD</th>
+            <th>Jurusan</th>
+            <th>Nilai</th>
+            <th>Predikat</th>
+            <th>Deskripsi</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          <tr>
+            <td colspan="7" class="text-center text-muted">
+              Pilih kelas terlebih dahulu
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
 </main>
+
+<!-- ===== MODAL LOGOUT ===== -->
+<div class="modal fade" id="modalLogout" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-exclamation-triangle text-warning"></i> Konfirmasi Logout
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        Apakah Anda yakin ingin keluar dari sistem penilaian?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Batal
+        </button>
+        <button type="button" class="btn btn-danger" onclick="confirmLogout()">
+          <i class="bi bi-box-arrow-right"></i> Logout
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 /* ==========================
@@ -173,17 +239,20 @@ const eskulSelect = document.getElementById("eskul");
 const kelasSelect = document.getElementById("kelas");
 const tbody = document.getElementById("tbody");
 const eskulTitle = document.getElementById("eskulTitle");
+const btnSimpan = document.getElementById("btnSimpan");
+const alertBox = document.getElementById("alertBox");
+const subTitle = document.getElementById("subTitle");
 
 const eskulLogin = localStorage.getItem("eskul_login");
 if(!eskulLogin){
-  location.href = "login.html";
+  location.href = "";
 }
 
 eskulSelect.innerHTML = `<option value="${eskulLogin}">${eskulLogin}</option>`;
 eskulTitle.innerText = eskulLogin.toUpperCase();
 
 /* ==========================
-   DATA DUMMY (SIMULASI DB)
+   DATA DUMMY
 ========================== */
 const dataSiswa = {
   X: [
@@ -196,9 +265,10 @@ const dataSiswa = {
   ]
 };
 
-/* ==========================
-   FUNCTION
-========================== */
+function getStorageKey(){
+  return `nilai_${eskulLogin}_${kelasSelect.value}`;
+}
+
 function getPredikat(nilai){
   if(nilai >= 90) return "A";
   if(nilai >= 80) return "B";
@@ -206,33 +276,44 @@ function getPredikat(nilai){
   return "D";
 }
 
+function showAlert(msg){
+  alertBox.innerHTML = `
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      ${msg}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  `;
+}
+
 function renderTable(kelas){
   tbody.innerHTML = "";
+  subTitle.innerText = `Sedang menilai kelas ${kelas}`;
 
   if(!dataSiswa[kelas]){
     tbody.innerHTML = `
       <tr>
-        <td colspan="7" class="text-center text-muted">
-          Data tidak tersedia
-        </td>
+        <td colspan="7" class="text-center text-muted">Data tidak tersedia</td>
       </tr>`;
     return;
   }
 
+  const savedData = JSON.parse(localStorage.getItem(getStorageKey()) || "[]");
+
   dataSiswa[kelas].forEach((siswa, i)=>{
+    const saved = savedData[i] || {};
+    const nilai = saved.nilai || "";
+    const deskripsi = saved.deskripsi || "";
+    const pred = nilai ? getPredikat(nilai) : "-";
+
     tbody.innerHTML += `
       <tr>
         <td class="text-center">${i+1}</td>
         <td>${siswa.nama}</td>
         <td>${siswa.nipd}</td>
         <td>${siswa.jurusan}</td>
-        <td>
-          <input type="number" class="form-control nilai" min="0" max="100">
-        </td>
-        <td class="predikat text-center">-</td>
-        <td>
-          <input type="text" class="form-control" placeholder="Deskripsi">
-        </td>
+        <td><input type="number" class="form-control nilai" min="0" max="100" value="${nilai}"></td>
+        <td class="predikat text-center">${pred}</td>
+        <td><input type="text" class="form-control deskripsi" placeholder="Deskripsi" value="${deskripsi}"></td>
       </tr>
     `;
   });
@@ -246,6 +327,25 @@ function renderTable(kelas){
   });
 }
 
+function simpanData(){
+  if(!kelasSelect.value){
+    alert("Pilih kelas terlebih dahulu!");
+    return;
+  }
+
+  const rows = document.querySelectorAll("#tbody tr");
+  const hasil = [];
+
+  rows.forEach(row=>{
+    const nilai = row.querySelector(".nilai")?.value || "";
+    const deskripsi = row.querySelector(".deskripsi")?.value || "";
+    hasil.push({ nilai, deskripsi });
+  });
+
+  localStorage.setItem(getStorageKey(), JSON.stringify(hasil));
+  showAlert("Data penilaian berhasil disimpan.");
+}
+
 /* ==========================
    EVENT
 ========================== */
@@ -255,11 +355,17 @@ kelasSelect.addEventListener("change", ()=>{
   }
 });
 
-function logout(){
+btnSimpan.addEventListener("click", simpanData);
+
+/* ==========================
+   LOGOUT CONFIRM
+========================== */
+function confirmLogout(){
   localStorage.removeItem("eskul_login");
-  location.href = "login.html";
+  location.href = "home";
 }
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
