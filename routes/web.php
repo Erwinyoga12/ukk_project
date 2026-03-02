@@ -21,9 +21,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 // Route ::get('/halo',function(){
 //    return view('coba.halo');
@@ -66,7 +63,7 @@ Route::get('/prestasi',[KegiatanController::class, 'pres']);
 
 Route::get('/home',[KegiatanController::class, 'home']);
 
-Route::get('/gin ',[KegiatanController::class, 'gin']);
+Route::get('/gin',[KegiatanController::class, 'gin']);
 
 Route::get('/prmkrekap ',[KegiatanController::class, 'rkpPramuka']);
 
