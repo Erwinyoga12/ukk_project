@@ -71,6 +71,8 @@ Route::get('/gotapramu ',[KegiatanController::class, 'gotapramuka']);
 
 Route::get('/eskul ',[KegiatanController::class, 'eskul']);
 
+Route::get('/contak ',[KegiatanController::class, 'contak']);
+
 Route::get('/contact',[ContactController::class, 'con'])->name('contact.index');
 
 Route::get('/users',[UserController::class, 'tambahdata']);

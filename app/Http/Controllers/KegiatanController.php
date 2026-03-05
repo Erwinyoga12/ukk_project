@@ -35,6 +35,10 @@ class KegiatanController extends Controller
     function gotapramuka(){
         return view ('gotapramuka');
     }
+
+    function contak(){
+        return view ('contak');
+    }
 }
 
 

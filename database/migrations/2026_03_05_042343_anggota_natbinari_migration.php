@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePasswordResetsTable extends Migration
+class AnggotaNatbinariMigration extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,14 @@ class CreatePasswordResetsTable extends Migration
      */
     public function up()
     {
-        Schema::create('password_resets', function (Blueprint $table) {
-            $table->string('email')->index();
-            $table->string('token');
+    Schema::create('anggota_natbinari', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama_siswa');
+            $table->string('nipd');
+            $table->string('kelas');
+            $table->string('jurusan');
             $table->timestamps();
-        });
+        });  
     }
 
     /**
@@ -27,6 +30,6 @@ class CreatePasswordResetsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('password_resets');
+        //
     }
 }
