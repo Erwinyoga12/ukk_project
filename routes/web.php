@@ -8,6 +8,7 @@ use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PenilaianController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -69,7 +70,7 @@ Route::get('/prmkrekap ',[KegiatanController::class, 'rkpPramuka']);
 
 Route::get('/gotapramu ',[KegiatanController::class, 'gotapramuka']);
 
-Route::get('/eskul ',[KegiatanController::class, 'eskul']);
+//Route::get('/eskul ',[KegiatanController::class, 'eskul']);
 
 Route::get('/contak ',[KegiatanController::class, 'contak']);
 
@@ -96,4 +97,5 @@ Route::get('/login', function (){
 Route::get('/dashboard', function (){
     return view ('dashboard');
 });
-
+Route::get('/eskul', [PenilaianController::class, 'index']);
+Route::get('/eskul/data', [PenilaianController::class, 'data']);
