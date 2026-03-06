@@ -98,4 +98,5 @@ Route::get('/dashboard', function (){
     return view ('dashboard');
 });
 Route::get('/eskul', [PenilaianController::class, 'index']);
-Route::get('/eskul/data', [PenilaianController::class, 'data']);
+Route::get('/eskul/data',[PenilaianController::class,'data']);
+Route::post('/eskul/simpan',[PenilaianController::class,'simpan']);

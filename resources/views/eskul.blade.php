@@ -11,10 +11,8 @@
 
 body{
 background:#eef1f4;
-font-family: sans-serif;
+font-family:sans-serif;
 }
-
-/* SIDEBAR */
 
 .sidebar{
 width:220px;
@@ -40,8 +38,6 @@ text-decoration:none;
 background:rgba(255,255,255,0.15);
 }
 
-/* CONTENT */
-
 .content{
 margin-left:220px;
 padding:30px;
@@ -56,23 +52,18 @@ margin-bottom:20px;
 }
 
 </style>
-
 </head>
+
 <body>
 
-<!-- SIDEBAR -->
 <div class="sidebar">
-
 <h4>PRAMUKA</h4>
-
 <a href="#">Penilaian</a>
 <a href="#">Rekap Penilaian</a>
 <a href="#">Logout</a>
-
 </div>
 
 
-<!-- CONTENT -->
 <div class="content">
 
 <div class="card-box">
@@ -87,9 +78,7 @@ margin-bottom:20px;
 
 <div class="col-md-4">
 <label>Eskul</label>
-<select id="eskul" class="form-control">
-<option value="pramuka">Pramuka</option>
-</select>
+<input type="text" class="form-control" value="pramuka" readonly>
 </div>
 
 <div class="col-md-4">
@@ -98,14 +87,19 @@ margin-bottom:20px;
 <option value="">Pilih Kelas</option>
 <option value="X">Kelas X</option>
 <option value="XI">Kelas XI</option>
-<option value="XII">Kelas XII</option>
 </select>
 </div>
 
-<div class="col-md-4 d-flex align-items-end">
-<button onclick="loadData()" class="btn btn-success">
-Simpan
+<div class="col-md-4 d-flex align-items-end gap-2">
+
+<button onclick="loadData()" class="btn btn-primary">
+Cari Data
 </button>
+
+<button onclick="simpanData()" class="btn btn-success">
+Simpan Nilai
+</button>
+
 </div>
 
 </div>
@@ -146,13 +140,50 @@ Pilih kelas terlebih dahulu
 </div>
 
 
-
 <script>
+
+function getPredikat(nilai){
+
+nilai = parseInt(nilai)
+
+if(isNaN(nilai)){
+return ""
+}
+
+if(nilai >= 85){
+return "A"
+}
+
+if(nilai >= 75){
+return "B"
+}
+
+if(nilai >= 10){
+return "C"
+}
+
+return ""
+
+}
+
+
+
+function updatePredikat(input){
+
+let nilai = input.value
+let row = input.closest("tr")
+let predikat = row.querySelector(".predikat")
+
+predikat.value = getPredikat(nilai)
+
+}
+
+
 
 function loadData(){
 
-let eskul = document.getElementById("eskul").value
 let kelas = document.getElementById("kelas").value
+let eskul = "pramuka"
 
 fetch(`/eskul/data?eskul=${eskul}&kelas=${kelas}`)
 .then(res => res.json())
@@ -165,26 +196,30 @@ data.forEach((siswa,index)=>{
 
 tabel.innerHTML += `
 <tr>
+
 <td>${index+1}</td>
-<td>${siswa.nama_siswa}</td>
-<td>${siswa.nipd}</td>
-<td>${siswa.jurusan}</td>
+
+<td class="nama_siswa">${siswa.nama_siswa}</td>
+
+<td class="nipd">${siswa.nipd}</td>
+
+<td class="jurusan">${siswa.jurusan}</td>
 
 <td>
-<input type="number" class="form-control" name="nilai[]">
+<input type="number"
+class="form-control nilai"
+oninput="updatePredikat(this)">
 </td>
 
 <td>
-<select class="form-control" name="predikat[]">
-<option>A</option>
-<option>B</option>
-<option>C</option>
-<option>D</option>
-</select>
+<input type="text"
+class="form-control predikat"
+readonly>
 </td>
 
 <td>
-<input type="text" class="form-control" name="deskripsi[]">
+<input type="text"
+class="form-control deskripsi">
 </td>
 
 </tr>
@@ -196,8 +231,62 @@ tabel.innerHTML += `
 
 }
 
-</script>
 
+
+function simpanData(){
+
+let rows = document.querySelectorAll("#tabel_siswa tr")
+
+let data = []
+
+rows.forEach(row => {
+
+let nama = row.querySelector(".nama_siswa")?.innerText
+let nipd = row.querySelector(".nipd")?.innerText
+let jurusan = row.querySelector(".jurusan")?.innerText
+let nilai = row.querySelector(".nilai")?.value
+let predikat = row.querySelector(".predikat")?.value
+let deskripsi = row.querySelector(".deskripsi")?.value
+
+if(nipd){
+
+data.push({
+nama_siswa:nama,
+nipd:nipd,
+jurusan:jurusan,
+nilai:nilai,
+predikat:predikat,
+deskripsi:deskripsi
+})
+
+}
+
+})
+
+fetch("/eskul/simpan",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json",
+"X-CSRF-TOKEN":"{{ csrf_token() }}"
+},
+
+body:JSON.stringify({
+eskul:"pramuka",
+kelas:document.getElementById("kelas").value,
+data:data
+})
+
+})
+.then(res=>res.json())
+.then(res=>{
+alert("Nilai berhasil disimpan")
+})
+
+}
+
+</script>
 
 </body>
 </html>

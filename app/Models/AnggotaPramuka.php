@@ -16,5 +16,6 @@ class AnggotaPramuka extends Model
         'nipd',
         'kelas',
         'jurusan'
+        
     ];
 }
