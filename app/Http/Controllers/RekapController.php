@@ -15,7 +15,8 @@ public function simpan(Request $request)
 
         RekapPramuka::create([
             'nipd' => $d['nipd'],
-            'kelas' => $kelas,
+            'kelas' => $d['kelas'],
+            'jurusan' => $d['jurusan'],
             'nilai' => $d['nilai'],
             'predikat' => $d['predikat'],
             'deskripsi' => $d['deskripsi']
