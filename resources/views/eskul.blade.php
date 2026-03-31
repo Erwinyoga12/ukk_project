@@ -24,7 +24,7 @@ body{background:#eef1f4;font-family:sans-serif}
 <div class="sidebar">
 <h4 id="eskulTitle"></h4>
 <a href="#">Penilaian</a>
-<a href="/rekap">Rekap</a>
+<a href="/prmkrekap">Rekap</a>
 <a href="#" onclick="logout()">Logout</a>
 </div>
 
