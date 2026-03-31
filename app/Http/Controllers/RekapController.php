@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AnggotaPramuka;
+use App\Models\AnggotaPaskibra;
+use App\Models\RekapPaskibra;
 use App\Models\RekapPramuka;
 
 class PenilaianController extends Controller
@@ -18,6 +20,14 @@ class PenilaianController extends Controller
         if($eskul == "pramuka"){
 
             $data = AnggotaPramuka::where('kelas',$kelas)->get();
+
+            return response()->json($data);
+
+        }
+
+         if($eskul == "paskibra"){
+
+            $data = AnggotaPaskibra::where('kelas',$kelas)->get();
 
             return response()->json($data);
 
@@ -41,27 +51,42 @@ class PenilaianController extends Controller
 
         foreach($data as $d){
 
-            RekapPramuka::updateOrCreate(
+        if($eskul == "pramuka"){
 
+            RekapPramuka::updateOrCreate(
                 [
                     'siswa_id' => $d['id'],
                     'eskul' => $eskul
                 ],
-
                 [
                     'kelas' => $kelas,
                     'nilai' => $d['nilai'],
                     'deskripsi' => $d['deskripsi']
                 ]
-
             );
 
         }
 
-        return response()->json([
-            "status"=>"success"
-        ]);
+        if($eskul == "paskibra"){
 
+            RekapPaskibra::updateOrCreate(
+                [
+                    'siswa_id' => $d['id'],
+                    'eskul' => $eskul
+                ],
+                [
+                    'kelas' => $kelas,
+                    'nilai' => $d['nilai'],
+                    'deskripsi' => $d['deskripsi']
+                ]
+            );
+
+        }
     }
+
+    return response()->json([
+        "status"=>"success"
+    ]);
+}
 
 }
