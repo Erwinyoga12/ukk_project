@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AnggotaPramuka;
+use App\Models\AnggotaPaskibra;
+use App\Models\RekapPaskibra;
 use App\Models\RekapPramuka;
 
 class PenilaianController extends Controller
@@ -25,6 +27,11 @@ class PenilaianController extends Controller
             return response()->json($data);
         }
 
+        if ($eskul == "paskibra") {
+            $data = AnggotaPaskibra::where('kelas', $kelas)->get();
+            return response()->json($data);
+        }
+
         
         return response()->json([]);
     }
@@ -37,16 +44,29 @@ class PenilaianController extends Controller
 
     foreach ($data as $item) {
 
-          RekapPramuka::create([
-            'nama_siswa' => $item['nama_siswa'],
-            'nipd' => $item['nipd'],
-            'kelas' => $kelas,
-            'jurusan' => $item['jurusan'],
-            'nilai' => $item['nilai'],
-            'predikat' => $item['predikat'],
-            'deskripsi' => $item['deskripsi']
-        ]);
+        if ($eskul == "pramuka") {
+            RekapPramuka::create([
+                'nama_siswa' => $item['nama_siswa'],
+                'nipd' => $item['nipd'],
+                'kelas' => $kelas,
+                'jurusan' => $item['jurusan'],
+                'nilai' => $item['nilai'],
+                'predikat' => $item['predikat'],
+                'deskripsi' => $item['deskripsi']
+            ]);
+        }
 
+        if ($eskul == "paskibra") {
+            RekapPaskibra::create([
+                'nama_siswa' => $item['nama_siswa'],
+                'nipd' => $item['nipd'],
+                'kelas' => $kelas,
+                'jurusan' => $item['jurusan'],
+                'nilai' => $item['nilai'],
+                'predikat' => $item['predikat'],
+                'deskripsi' => $item['deskripsi']
+            ]);
+        }
     }
 
     return response()->json([
