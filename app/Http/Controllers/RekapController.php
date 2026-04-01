@@ -5,8 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\AnggotaPramuka;
 use App\Models\AnggotaPaskibra;
+use App\Models\AnggotaNatbinari;
+use App\Models\AnggotaJurnal;
+use App\Models\AnggotaMarchingband;
 use App\Models\RekapPaskibra;
 use App\Models\RekapPramuka;
+use App\Models\RekapJurnal;
+use App\Models\RekapNatbinari;
+use App\Models\RekapMarchingband;
 
 class PenilaianController extends Controller
 {
@@ -24,9 +30,33 @@ class PenilaianController extends Controller
 
         }
 
-         if($eskul == "paskibra"){
+        if($eskul == "paskibra"){
 
             $data = AnggotaPaskibra::where('kelas',$kelas)->get();
+
+            return response()->json($data);
+
+        }
+
+        if($eskul == "natbinari"){
+
+            $data = AnggotaNatbinari::where('kelas',$kelas)->get();
+
+            return response()->json($data);
+
+        }
+
+        if($eskul == "jurnal"){
+
+            $data = AnggotaJurnal::where('kelas',$kelas)->get();
+
+            return response()->json($data);
+
+        }
+
+        if($eskul == "marchingband"){
+
+            $data = AnggotaMarchingband::where('kelas',$kelas)->get();
 
             return response()->json($data);
 
@@ -69,6 +99,54 @@ class PenilaianController extends Controller
         if($eskul == "paskibra"){
 
             RekapPaskibra::updateOrCreate(
+                [
+                    'siswa_id' => $d['id'],
+                    'eskul' => $eskul
+                ],
+                [
+                    'kelas' => $kelas,
+                    'nilai' => $d['nilai'],
+                    'deskripsi' => $d['deskripsi']
+                ]
+            );
+
+        }
+
+        if($eskul == "natbinari"){
+
+            RekapNatbinari::updateOrCreate(
+                [
+                    'siswa_id' => $d['id'],
+                    'eskul' => $eskul
+                ],
+                [
+                    'kelas' => $kelas,
+                    'nilai' => $d['nilai'],
+                    'deskripsi' => $d['deskripsi']
+                ]
+            );
+
+        }
+
+        if($eskul == "jurnal"){
+
+            RekapJurnal::updateOrCreate(
+                [
+                    'siswa_id' => $d['id'],
+                    'eskul' => $eskul
+                ],
+                [
+                    'kelas' => $kelas,
+                    'nilai' => $d['nilai'],
+                    'deskripsi' => $d['deskripsi']
+                ]
+            );
+
+        }
+
+        if($eskul == "marchingband"){
+
+            RekapMarchingband::updateOrCreate(
                 [
                     'siswa_id' => $d['id'],
                     'eskul' => $eskul
