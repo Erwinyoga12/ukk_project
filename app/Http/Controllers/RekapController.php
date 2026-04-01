@@ -13,6 +13,7 @@ use App\Models\RekapPramuka;
 use App\Models\RekapJurnal;
 use App\Models\RekapNatbinari;
 use App\Models\RekapMarchingband;
+use App\Models\RekapPmr;
 
 class PenilaianController extends Controller
 {
@@ -165,6 +166,31 @@ class PenilaianController extends Controller
     return response()->json([
         "status"=>"success"
     ]);
+
+    
 }
 
+public function index()
+    {
+        $eskul = strtolower(auth()->user()->eskul);
+
+        $models = [
+            'pmr' => RekapPmr::class,
+            'pramuka' => RekapPramuka::class,
+            'paskibra' => RekapPaskibra::class,
+            'natbinari' => RekapNatbinari::class,
+            'jurnal' => RekapJurnal::class,
+            'marchingband' => RekapMarchingband::class,
+        ];
+
+        $model = $models[$eskul] ?? null;
+
+        if ($model) {
+            $data = $model::all();
+        } else {
+            $data = collect();
+        }
+
+        return view('rekap', compact('data', 'eskul'));
+    }
 }
