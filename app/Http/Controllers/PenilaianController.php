@@ -8,11 +8,13 @@ use App\Models\AnggotaNatbinari;
 use App\Models\AnggotaJurnal;
 use App\Models\AnggotaMarchingband;
 use App\Models\AnggotaPaskibra;
+use App\Models\AnggotaPmr;
 use App\Models\RekapPaskibra;
 use App\Models\RekapPramuka;
 use App\Models\RekapNatbinari;
 use App\Models\RekapJurnal;
 use App\Models\RekapMarchingband;
+use App\Models\RekapPmr;
 
 class PenilaianController extends Controller
 {
@@ -50,6 +52,11 @@ class PenilaianController extends Controller
 
          if ($eskul == "marchingband") {
             $data = AnggotaMarchingband::where('kelas', $kelas)->get();
+            return response()->json($data);
+        }
+
+        if ($eskul == "pmr") {
+            $data = AnggotaPmr::where('kelas', $kelas)->get();
             return response()->json($data);
         }
 
@@ -115,6 +122,18 @@ class PenilaianController extends Controller
 
         if ($eskul == "marchingband") {
             RekapMarchingband::create([
+                'nama_siswa' => $item['nama_siswa'],
+                'nipd' => $item['nipd'],
+                'kelas' => $kelas,
+                'jurusan' => $item['jurusan'],
+                'nilai' => $item['nilai'],
+                'predikat' => $item['predikat'],
+                'deskripsi' => $item['deskripsi']
+            ]);
+        }
+
+         if ($eskul == "pmr") {
+            RekapPmr::create([
                 'nama_siswa' => $item['nama_siswa'],
                 'nipd' => $item['nipd'],
                 'kelas' => $kelas,
