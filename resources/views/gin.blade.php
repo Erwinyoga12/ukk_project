@@ -5,6 +5,9 @@
 <title>Login Eskul</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+{{-- WAJIB: untuk fetch POST ke Laravel --}}
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
@@ -44,29 +47,45 @@ input{width:100%;border:none;border-bottom:1px solid #ddd;padding:10px 0;font-si
 
 <script>
 
-function login(){
+async function login(){
 
-const username=document.getElementById("username").value.toLowerCase()
-const password=document.getElementById("password").value
+    const username = document.getElementById("username").value.toLowerCase()
+    const password = document.getElementById("password").value
 
-const akun={
-pramuka:{password:"123",eskul:"pramuka"},
-paskibra:{password:"123",eskul:"paskibra"},
-pmr:{password:"123",eskul:"pmr"},
-natbinari:{password:"123",eskul:"natbinari"},
-jurnal:{password:"123",eskul:"jurnal"}
-}
+    const akun = {
+        pramuka:     { password:"123", eskul:"pramuka"      },
+        paskibra:    { password:"123", eskul:"paskibra"     },
+        pmr:         { password:"123", eskul:"pmr"          },
+        natbinari:   { password:"123", eskul:"natbinari"    },
+        jurnal:      { password:"123", eskul:"jurnal"       },
+        marchingband:{ password:"123", eskul:"marchingband" }
+    }
 
-if(akun[username] && akun[username].password===password){
+    if(akun[username] && akun[username].password === password){
 
-localStorage.setItem("eskul_login",akun[username].eskul)
-window.location.href="/eskul"
+        const eskul = akun[username].eskul
 
-}else{
+        // 1. Simpan ke localStorage (untuk tampilan JS di halaman eskul)
+        localStorage.setItem("eskul_login", eskul)
 
-alert("Username atau password salah")
+        // 2. Set session Laravel supaya RekapController bisa baca
+        await fetch("/set-session", {
+            method: "POST",
+            headers: {
+                "Content-Type":  "application/json",
+                "X-CSRF-TOKEN":  document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ eskul: eskul })
+        })
 
-}
+        // 3. Redirect ke halaman penilaian
+        window.location.href = "/eskul"
+
+    } else {
+
+        alert("Username atau password salah")
+
+    }
 
 }
 
