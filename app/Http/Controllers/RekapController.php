@@ -12,16 +12,8 @@ use App\Models\RekapMarchingband;
 
 class RekapController extends Controller
 {
-<<<<<<< HEAD
-    /* =====================
-       AMBIL DATA SISWA
-    ===================== */
-    public function getSiswa($eskul,$kelas)
-=======
     public function index()
->>>>>>> 347fe212ceb6be0521a04fbd94774eb528c52ea3
     {
-        // Baca eskul dari session Laravel (di-set saat login via /set-session)
         $eskul = session('eskul_login');
 
         if (!$eskul) {
@@ -38,6 +30,11 @@ class RekapController extends Controller
         ];
 
         $model = $models[$eskul] ?? null;
+
+        // ✅ Kalau belum simpan nilai di sesi ini, tampilkan kosong
+        if (!session('sudah_nilai')) {
+            return view('rkpPramuka', ['data' => collect(), 'eskul' => $eskul]);
+        }
 
         $data = $model
             ? $model::orderBy('kelas')->orderBy('nama_siswa')->get()

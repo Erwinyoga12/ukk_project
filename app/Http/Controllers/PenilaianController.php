@@ -18,135 +18,71 @@ use App\Models\RekapPmr;
 
 class PenilaianController extends Controller
 {
-    // halaman utama /eskul
     public function index()
     {
         return view('eskul');
     }
 
-    // ambil data siswa berdasarkan eskul dan kelas
     public function data(Request $request)
     {
         $eskul = $request->eskul;
         $kelas = $request->kelas;
 
-        if ($eskul == "pramuka") {
-            $data = AnggotaPramuka::where('kelas', $kelas)->get();
-            return response()->json($data);
+        $anggotaModels = [
+            'pramuka'      => AnggotaPramuka::class,
+            'paskibra'     => AnggotaPaskibra::class,
+            'natbinari'    => AnggotaNatbinari::class,
+            'jurnal'       => AnggotaJurnal::class,
+            'marchingband' => AnggotaMarchingband::class,
+            'pmr'          => AnggotaPmr::class,
+        ];
+
+        $model = $anggotaModels[$eskul] ?? null;
+
+        if (!$model) {
+            return response()->json([]);
         }
 
-         if ($eskul == "paskibra") {
-            $data = AnggotaPaskibra::where('kelas', $kelas)->get();
-            return response()->json($data);
-        }
-
-         if ($eskul == "natbinari") {
-            $data = AnggotaNatbinari::where('kelas', $kelas)->get();
-            return response()->json($data);
-        }
-
-         if ($eskul == "nurnal") {
-            $data = AnggotaJurnal::where('kelas', $kelas)->get();
-            return response()->json($data);
-        }
-
-         if ($eskul == "marchingband") {
-            $data = AnggotaMarchingband::where('kelas', $kelas)->get();
-            return response()->json($data);
-        }
-
-        if ($eskul == "pmr") {
-            $data = AnggotaPmr::where('kelas', $kelas)->get();
-            return response()->json($data);
-        }
-
-        
-        return response()->json([]);
+        $data = $model::where('kelas', $kelas)->get();
+        return response()->json($data);
     }
 
     public function simpan(Request $request)
 {
     $kelas = $request->kelas;
     $eskul = $request->eskul;
-    $data = $request->data;
+    $data  = $request->data;
 
-    foreach ($data as $item) {
+    $rekapModels = [
+        'pramuka'      => RekapPramuka::class,
+        'paskibra'     => RekapPaskibra::class,
+        'natbinari'    => RekapNatbinari::class,
+        'jurnal'       => RekapJurnal::class,
+        'marchingband' => RekapMarchingband::class,
+        'pmr'          => RekapPmr::class,
+    ];
 
-        if ($eskul == "pramuka") {
-            RekapPramuka::create([
-                'nama_siswa' => $item['nama_siswa'],
-                'nipd' => $item['nipd'],
-                'kelas' => $kelas,
-                'jurusan' => $item['jurusan'],
-                'nilai' => $item['nilai'],
-                'predikat' => $item['predikat'],
-                'deskripsi' => $item['deskripsi']
-            ]);
-        }
+    $model = $rekapModels[$eskul] ?? null;
 
-        if ($eskul == "paskibra") {
-            RekapPaskibra::create([
-                'nama_siswa' => $item['nama_siswa'],
-                'nipd' => $item['nipd'],
-                'kelas' => $kelas,
-                'jurusan' => $item['jurusan'],
-                'nilai' => $item['nilai'],
-                'predikat' => $item['predikat'],
-                'deskripsi' => $item['deskripsi']
-            ]);
-        }
-
-        if ($eskul == "natbinari") {
-            RekapNatbinari::create([
-                'nama_siswa' => $item['nama_siswa'],
-                'nipd' => $item['nipd'],
-                'kelas' => $kelas,
-                'jurusan' => $item['jurusan'],
-                'nilai' => $item['nilai'],
-                'predikat' => $item['predikat'],
-                'deskripsi' => $item['deskripsi']
-            ]);
-        }
-
-        if ($eskul == "jurnal") {
-            RekapJurnal::create([
-                'nama_siswa' => $item['nama_siswa'],
-                'nipd' => $item['nipd'],
-                'kelas' => $kelas,
-                'jurusan' => $item['jurusan'],
-                'nilai' => $item['nilai'],
-                'predikat' => $item['predikat'],
-                'deskripsi' => $item['deskripsi']
-            ]);
-        }
-
-        if ($eskul == "marchingband") {
-            RekapMarchingband::create([
-                'nama_siswa' => $item['nama_siswa'],
-                'nipd' => $item['nipd'],
-                'kelas' => $kelas,
-                'jurusan' => $item['jurusan'],
-                'nilai' => $item['nilai'],
-                'predikat' => $item['predikat'],
-                'deskripsi' => $item['deskripsi']
-            ]);
-        }
-
-         if ($eskul == "pmr") {
-            RekapPmr::create([
-                'nama_siswa' => $item['nama_siswa'],
-                'nipd' => $item['nipd'],
-                'kelas' => $kelas,
-                'jurusan' => $item['jurusan'],
-                'nilai' => $item['nilai'],
-                'predikat' => $item['predikat'],
-                'deskripsi' => $item['deskripsi']
-            ]);
-        }
+    if (!$model) {
+        return response()->json(['status' => 'eskul tidak dikenali'], 400);
     }
 
-    return response()->json([
-        'status' => 'success'
-    ]);
+    // ✅ Langsung insert tanpa hapus data lama
+    foreach ($data as $item) {
+        $model::create([
+            'nama_siswa' => $item['nama_siswa'],
+            'nipd'       => $item['nipd'],
+            'kelas'      => $kelas,
+            'jurusan'    => $item['jurusan'],
+            'nilai'      => $item['nilai'],
+            'predikat'   => $item['predikat'],
+            'deskripsi'  => $item['deskripsi'],
+        ]);
+    }
+
+    session(['sudah_nilai' => true]);
+
+    return response()->json(['status' => 'success']);
 }
 }
