@@ -273,7 +273,7 @@ function showLogoutModal(){
 async function confirmLogout(){
   localStorage.removeItem("eskul_login");
 
-  // Hapus session Laravel juga
+  // ✅ Hapus session + flag sudah_nilai
   await fetch("/logout-eskul", {
     method: "POST",
     headers: { "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content }

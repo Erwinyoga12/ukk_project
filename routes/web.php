@@ -57,7 +57,26 @@ Route::get('/rekap', [RekapController::class, 'index']);
 
 // Dipanggil saat logout dari halaman rekap
 Route::post('/logout-eskul', function(){
+    $eskul = session('eskul_login');
+
+    $models = [
+        'pramuka'      => \App\Models\RekapPramuka::class,
+        'paskibra'     => \App\Models\RekapPaskibra::class,
+        'natbinari'    => \App\Models\RekapNatbinari::class,
+        'jurnal'       => \App\Models\RekapJurnal::class,
+        'marchingband' => \App\Models\RekapMarchingband::class,
+        'pmr'          => \App\Models\RekapPmr::class,
+    ];
+
+    // ✅ Hapus semua data rekap saat logout
+    $model = $models[$eskul] ?? null;
+    if ($model) {
+        $model::query()->delete();
+    }
+
     session()->forget('eskul_login');
+    session()->forget('sudah_nilai');
+
     return response()->json(['status' => 'ok']);
 });
 Route::get('/',[KegiatanController::class, 'home']);
