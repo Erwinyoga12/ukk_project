@@ -1,45 +1,40 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class ControllerAuth extends Controller
 {
     public function index()
     {
-        return view('login');
+        return view('gin');
     }
 
-    public function cek_akun(Request $request)
+    public function login(Request $request)
     {
-        // Validasi input biar gak kosong atau aneh
         $request->validate([
             'username' => 'required|string',
             'password' => 'required|string',
         ]);
 
-        $username = $request->username;
+        $input = strtolower($request->username);
         $password = $request->password;
 
-        $user = User::where('name', $username)->first();
+        $user = User::where('email', $input)
+                    ->orWhere('name', $input)
+                    ->first();
 
-        // Kalau user gak ketemu
-        if (!$user) {
-            return redirect()->route('login')->with('pesan', 'Username atau password salah!');
+        if ($user && Hash::check($password, $user->password)) {
+            session([
+                'eskul_login' => $user->name,
+                'user_id' => $user->id,
+                'logged_in' => true
+            ]);
+            return redirect('/eskul');
         }
 
-        // Kalau password salah
-        if (Hash::check($password, $user->password)) {
-            return redirect()->route('login')->with('pesan', 'SALAH!');
-        }
-
-        // Kalau berhasil login
-        Auth::login($user);
-        return redirect()->route('dashboard');
-        
+        return redirect()->back()->withInput()->with('pesan', 'Username atau password salah');
     }
 }

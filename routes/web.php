@@ -8,7 +8,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PenilaianController;
-use App\Http\Controllers\RekapController;      // ← tambah ini
+use App\Http\Controllers\RekapController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -27,35 +27,47 @@ Route::get('/contak',[KegiatanController::class, 'contak']);
 Route::get('/contact',[ContactController::class, 'con'])->name('contact.index');
 Route::get('/users',[UserController::class, 'tambahdata']);
 Route::post('contact',[ContactController::class, 'store'])->name('contact.store');
-Route::post('cek_user',[ControllerAuth::class, 'cek_akun'])->name('cek_user');
 Route::get('/dashboard',[AdControlller::class, 'dash'])->name('dashboard');
 Route::get('/customer',[CustomerController::class, 'cus'])->name('customer.cus');
 Route::post('/customer',[CustomerController::class, 'store'])->name('customer.store');
 Route::get('/product',[ProductController::class, 'pro'])->name('product.pro');
 Route::post('/product',[ProductController::class, 'store'])->name('product.store');
 
-Route::get('/login', function(){ return view('login'); });
+/* ============================================================
+   ROUTE AUTH / LOGIN
+============================================================ */
+// ✅ Gunakan nama route yang berbeda agar tidak conflict
+Route::post('cek_user', [ControllerAuth::class, 'login'])->name('login.process');
+Route::get('/gin', function(){ return view('gin'); });
+Route::post('/gin', [ControllerAuth::class, 'login'])->name('gin.login'); // ← nama diubah
 
-Route::get('/eskul', [PenilaianController::class, 'index']);
-Route::get('/eskul/data',[PenilaianController::class,'data']);
-Route::post('/eskul/simpan',[PenilaianController::class,'simpan']);
+/* ============================================================
+   ROUTE PENILAIAN ESKUL
+============================================================ */
+// ✅ HANYA SATU definisi /eskul → pakai Controller
+// Proteksi session sudah handled di PenilaianController@index()
+Route::get('/eskul', [PenilaianController::class, 'index'])->name('eskul');
+Route::get('/eskul/data', [PenilaianController::class, 'data']);
+Route::post('/eskul/simpan', [PenilaianController::class, 'simpan']);
+
+// ❌ HAPUS blok ini (duplicate route /eskul yang pakai Closure):
+// Route::get('/eskul', function() {
+//     if (!session('logged_in')) {
+//         return redirect('/login')->with('pesan', 'Silakan login dulu');
+//     }
+//     return view('eskul');
+// })->name('eskul');
 
 /* ============================================================
    ROUTE BARU — untuk sistem rekap
-   Tambahkan 3 route ini saja
 ============================================================ */
-
-// Dipanggil fetch() dari gin.blade.php saat login berhasil
-// Tugasnya: simpan eskul ke session Laravel
 Route::post('/set-session', function(Request $request){
     session(['eskul_login' => $request->eskul]);
     return response()->json(['status' => 'ok']);
 });
 
-// Halaman rekap — baca data dari DB sesuai eskul yang login
-Route::get('/rekap', [RekapController::class, 'index']);
+Route::get('/rekap', [RekapController::class, 'index'])->name('rekap.index');
 
-// Dipanggil saat logout dari halaman rekap
 Route::post('/logout-eskul', function(){
     $eskul = session('eskul_login');
 
@@ -68,7 +80,6 @@ Route::post('/logout-eskul', function(){
         'pmr'          => \App\Models\RekapPmr::class,
     ];
 
-    // ✅ Hapus semua data rekap saat logout
     $model = $models[$eskul] ?? null;
     if ($model) {
         $model::query()->delete();
@@ -79,4 +90,5 @@ Route::post('/logout-eskul', function(){
 
     return response()->json(['status' => 'ok']);
 });
-Route::get('/',[KegiatanController::class, 'home']);
+
+Route::get('/', [KegiatanController::class, 'home']);

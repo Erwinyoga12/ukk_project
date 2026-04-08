@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -20,7 +19,14 @@ class PenilaianController extends Controller
 {
     public function index()
     {
-        return view('eskul');
+        if (!session('logged_in')) {
+            return redirect('/gin')->with('pesan', 'Silakan login dulu');
+        }
+
+        $eskul = session('eskul_login');
+        $kelasOptions = ['X', 'XI', 'XII'];
+
+        return view('eskul', compact('eskul', 'kelasOptions'));
     }
 
     public function data(Request $request)
@@ -38,51 +44,72 @@ class PenilaianController extends Controller
         ];
 
         $model = $anggotaModels[$eskul] ?? null;
+        if (!$model) return response()->json([]);
 
-        if (!$model) {
-            return response()->json([]);
-        }
+        // Ambil data + nilai yang sudah ada (jika ada)
+        $data = $model::where('kelas', $kelas)->get()->map(function ($s) use ($eskul, $kelas) {
+            $rekapModels = [
+                'pramuka'      => RekapPramuka::class,
+                'paskibra'     => RekapPaskibra::class,
+                'natbinari'    => RekapNatbinari::class,
+                'jurnal'       => RekapJurnal::class,
+                'marchingband' => RekapMarchingband::class,
+                'pmr'          => RekapPmr::class,
+            ];
+            $rekapModel = $rekapModels[$eskul] ?? null;
+            $nilai = $rekapModel ? $rekapModel::where('nipd', $s->nipd)->where('kelas', $kelas)->first() : null;
 
-        $data = $model::where('kelas', $kelas)->get();
+            return [
+                'nama_siswa' => $s->nama_siswa,
+                'nipd' => $s->nipd,
+                'jurusan' => $s->jurusan ?? '-',
+                'nilai_lama' => $nilai?->nilai,
+                'predikat_lama' => $nilai?->predikat,
+                'deskripsi_lama' => $nilai?->deskripsi,
+            ];
+        });
+
         return response()->json($data);
     }
 
     public function simpan(Request $request)
-{
-    $kelas = $request->kelas;
-    $eskul = $request->eskul;
-    $data  = $request->data;
+    {
+        $kelas = $request->kelas;
+        $eskul = $request->eskul;
+        $data  = $request->data;
 
-    $rekapModels = [
-        'pramuka'      => RekapPramuka::class,
-        'paskibra'     => RekapPaskibra::class,
-        'natbinari'    => RekapNatbinari::class,
-        'jurnal'       => RekapJurnal::class,
-        'marchingband' => RekapMarchingband::class,
-        'pmr'          => RekapPmr::class,
-    ];
+        $rekapModels = [
+            'pramuka'      => RekapPramuka::class,
+            'paskibra'     => RekapPaskibra::class,
+            'natbinari'    => RekapNatbinari::class,
+            'jurnal'       => RekapJurnal::class,
+            'marchingband' => RekapMarchingband::class,
+            'pmr'          => RekapPmr::class,
+        ];
 
-    $model = $rekapModels[$eskul] ?? null;
+        $model = $rekapModels[$eskul] ?? null;
+        if (!$model) {
+            return response()->json(['status' => 'eskul tidak dikenali'], 400);
+        }
 
-    if (!$model) {
-        return response()->json(['status' => 'eskul tidak dikenali'], 400);
+        $updated = 0;
+        foreach ($data as $item) {
+            if (empty($item['nilai'])) continue; // Skip yang kosong
+
+            $model::updateOrCreate(
+                ['nipd' => $item['nipd'],  'kelas' => $kelas],
+                [
+                    'nama_siswa' => $item['nama_siswa'],
+                    'jurusan'    => $item['jurusan'] ?? '-',
+                    'nilai'      => $item['nilai'],
+                    'predikat'   => $item['predikat'],
+                    'deskripsi'  => $item['deskripsi'] ?? null,
+                ]
+            );
+            $updated++;
+        }
+
+        session(['sudah_nilai' => true]);
+        return response()->json(['status' => 'success', 'message' => "$updated data disimpan"]);
     }
-
-    // ✅ Langsung insert tanpa hapus data lama
-    foreach ($data as $item) {
-        $model::create([
-            'nama_siswa' => $item['nama_siswa'],
-            'nipd'       => $item['nipd'],
-            'kelas'      => $kelas,
-            'jurusan'    => $item['jurusan'],
-            'nilai'      => $item['nilai'],
-            'predikat'   => $item['predikat'],
-            'deskripsi'  => $item['deskripsi'],
-        ]);
-    }
-
-    session(['sudah_nilai' => true]);
-
-    return response()->json(['status' => 'success']);
-}
 }
