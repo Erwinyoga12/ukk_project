@@ -12,14 +12,7 @@ use App\Models\RekapMarchingband;
 
 class RekapController extends Controller
 {
-<<<<<<< HEAD
-    /* =====================
-       AMBIL DATA SISWA
-    ===================== */
-    public function getSiswa($eskul,$kelas)
-=======
     public function index()
->>>>>>> 347fe212ceb6be0521a04fbd94774eb528c52ea3
     {
         $eskul = session('eskul_login');
 
