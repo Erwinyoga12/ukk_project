@@ -12,33 +12,43 @@ use App\Models\RekapMarchingband;
 
 class RekapController extends Controller
 {
+    private array $rekapModels = [
+        'pmr'          => RekapPmr::class,
+        'pramuka'      => RekapPramuka::class,
+        'paskibra'     => RekapPaskibra::class,
+        'natbinari'    => RekapNatbinari::class,
+        'jurnal'       => RekapJurnal::class,
+        'marchingband' => RekapMarchingband::class,
+    ];
+
     public function index()
     {
         $eskul = session('eskul_login');
 
+        // ✅ FIX: tambah with('pesan', ...) supaya notif muncul di halaman login
         if (!$eskul) {
-            return redirect('/gin');
+            return redirect('/gin')->with('pesan', 'Silakan login terlebih dahulu.');
         }
 
-        $models = [
-            'pmr'          => RekapPmr::class,
-            'pramuka'      => RekapPramuka::class,
-            'paskibra'     => RekapPaskibra::class,
-            'natbinari'    => RekapNatbinari::class,
-            'jurnal'       => RekapJurnal::class,
-            'marchingband' => RekapMarchingband::class,
-        ];
+        $model = $this->rekapModels[$eskul] ?? null;
 
-        $model = $models[$eskul] ?? null;
+        // ✅ FIX: kalau eskul tidak dikenali, logout paksa daripada diam-diam error
+        if (!$model) {
+            session()->forget(['eskul_login', 'sudah_nilai']);
+            return redirect('/gin')->with('pesan', 'Sesi tidak valid. Silakan login kembali.');
+        }
 
-        // ✅ Kalau belum simpan nilai di sesi ini, tampilkan kosong
+        // Belum simpan nilai di sesi ini → tampilkan tabel kosong
         if (!session('sudah_nilai')) {
-            return view('rkpPramuka', ['data' => collect(), 'eskul' => $eskul]);
+            return view('rkpPramuka', [
+                'data'  => collect(),
+                'eskul' => $eskul,
+            ]);
         }
 
-        $data = $model
-            ? $model::orderBy('kelas')->orderBy('nama_siswa')->get()
-            : collect();
+        $data = $model::orderBy('kelas')
+                      ->orderBy('nama_siswa')
+                      ->get();
 
         return view('rkpPramuka', compact('data', 'eskul'));
     }

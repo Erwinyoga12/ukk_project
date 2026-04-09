@@ -11,21 +11,20 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         $users = [
-            // [name => eskul, email => login alternatif, password default]
-            ['eskul' => 'pramuka',      'email' => 'pramuka@eskul.com'],
-            ['eskul' => 'paskibra',     'email' => 'paskibra@eskul.com'],
-            ['eskul' => 'pmr',          'email' => 'pmr@eskul.com'],
-            ['eskul' => 'natbinari',    'email' => 'natbinari@eskul.com'],
-            ['eskul' => 'jurnal',       'email' => 'jurnal@eskul.com'],
-            ['eskul' => 'marchingband', 'email' => 'marchingband@eskul.com'],
+            ['eskul' => 'pramuka',      'email' => 'pramuka@eskul.com',      'password' => 'pramuka2026'],
+            ['eskul' => 'paskibra',     'email' => 'paskibra@eskul.com',     'password' => 'paskibra2026'],
+            ['eskul' => 'pmr',          'email' => 'pmr@eskul.com',          'password' => 'pmr2026'],
+            ['eskul' => 'natbinari',    'email' => 'natbinari@eskul.com',    'password' => 'natbinari2026'],
+            ['eskul' => 'jurnal',       'email' => 'jurnal@eskul.com',       'password' => 'jurnal2026'],
+            ['eskul' => 'marchingband', 'email' => 'marchingband@eskul.com', 'password' => 'marchingband2026'],
         ];
 
         foreach ($users as $data) {
             User::updateOrCreate(
-                ['email' => $data['email']], // unique key
+                ['email' => $data['email']],
                 [
-                    'name' => $data['eskul'],           // simpan eskul di 'name'
-                    'password' => Hash::make('123'),    // 🔐 Ganti setelah deploy!
+                    'name'     => $data['eskul'],
+                    'password' => Hash::make($data['password']),
                 ]
             );
         }
