@@ -99,9 +99,9 @@ class PenilaianController extends Controller
                     'nama_siswa'     => $s->nama_siswa,
                     'nipd'           => $s->nipd,
                     'jurusan'        => $s->jurusan ?? '-',
-                    'nilai_lama'     => $nilai?->nilai,
-                    'predikat_lama'  => $nilai?->predikat,
-                    'deskripsi_lama' => $nilai?->deskripsi,
+                    'nilai_lama'     => $nilai->nilai,
+                    'predikat_lama'  => $nilai->predikat,
+                    'deskripsi_lama' => $nilai->deskripsi,
                 ];
             });
 
