@@ -17,126 +17,87 @@ use App\Models\RekapPmr;
 
 class PenilaianController extends Controller
 {
-    // -------------------------------------------------------
-    // Map eskul → model (didefinisikan sekali, dipakai ulang)
-    // -------------------------------------------------------
-    private array $anggotaModels = [
-        'pramuka'      => AnggotaPramuka::class,
-        'paskibra'     => AnggotaPaskibra::class,
-        'natbinari'    => AnggotaNatbinari::class,
-        'jurnal'       => AnggotaJurnal::class,
-        'marchingband' => AnggotaMarchingband::class,
-        'pmr'          => AnggotaPmr::class,
-    ];
-
-    private array $rekapModels = [
-        'pramuka'      => RekapPramuka::class,
-        'paskibra'     => RekapPaskibra::class,
-        'natbinari'    => RekapNatbinari::class,
-        'jurnal'       => RekapJurnal::class,
-        'marchingband' => RekapMarchingband::class,
-        'pmr'          => RekapPmr::class,
-    ];
-
-    // -------------------------------------------------------
-    // Helper: cek session login, return eskul atau abort
-    // -------------------------------------------------------
-    private function getEskulFromSession(): string
-    {
-        $eskul = session('eskul_login');
-
-        if (!$eskul) {
-            abort(401, 'Sesi tidak ditemukan. Silakan login terlebih dahulu.');
-        }
-
-        return $eskul;
-    }
-
-    // -------------------------------------------------------
-    // GET /eskul — tampilkan halaman penilaian
-    // -------------------------------------------------------
     public function index()
     {
-        // ✅ FIX: cek 'eskul_login', bukan 'logged_in'
-        if (!session('eskul_login')) {
+        if (!session('logged_in')) {
             return redirect('/gin')->with('pesan', 'Silakan login dulu');
         }
 
-        $eskul        = session('eskul_login');
-        $kelasOptions = ['X', 'XI'];
+        $eskul = session('eskul_login');
+        $kelasOptions = ['X', 'XI',];
 
         return view('eskul', compact('eskul', 'kelasOptions'));
     }
 
-    // -------------------------------------------------------
-    // GET /eskul/data — ambil data siswa + nilai lama
-    // -------------------------------------------------------
     public function data(Request $request)
     {
-        // ✅ FIX: eskul dari SESSION, bukan dari query string
-        $eskul = $this->getEskulFromSession();
+        $eskul = $request->eskul;
         $kelas = $request->kelas;
 
-        if (!$kelas) {
-            return response()->json(['message' => 'Parameter kelas diperlukan.'], 422);
-        }
+        $anggotaModels = [
+            'pramuka'      => AnggotaPramuka::class,
+            'paskibra'     => AnggotaPaskibra::class,
+            'natbinari'    => AnggotaNatbinari::class,
+            'jurnal'       => AnggotaJurnal::class,
+            'marchingband' => AnggotaMarchingband::class,
+            'pmr'          => AnggotaPmr::class,
+        ];
 
-        $anggotaModel = $this->anggotaModels[$eskul] ?? null;
-        $rekapModel   = $this->rekapModels[$eskul]   ?? null;
+        $model = $anggotaModels[$eskul] ?? null;
+        if (!$model) return response()->json([]);
 
-        if (!$anggotaModel) {
-            return response()->json(['message' => 'Eskul tidak dikenali.'], 400);
-        }
+        // Ambil data + nilai yang sudah ada (jika ada)
+        $data = $model::where('kelas', $kelas)->get()->map(function ($s) use ($eskul, $kelas) {
+            $rekapModels = [
+                'pramuka'      => RekapPramuka::class,
+                'paskibra'     => RekapPaskibra::class,
+                'natbinari'    => RekapNatbinari::class,
+                'jurnal'       => RekapJurnal::class,
+                'marchingband' => RekapMarchingband::class,
+                'pmr'          => RekapPmr::class,
+            ];
+            $rekapModel = $rekapModels[$eskul] ?? null;
+            $nilai = $rekapModel ? $rekapModel::where('nipd', $s->nipd)->where('kelas', $kelas)->first() : null;
 
-        $data = $anggotaModel::where('kelas', $kelas)
-            ->get()
-            ->map(function ($s) use ($rekapModel, $kelas) {
-                $nilai = $rekapModel
-                    ? $rekapModel::where('nipd', $s->nipd)->where('kelas', $kelas)->first()
-                    : null;
-
-                return [
-                    'nama_siswa'     => $s->nama_siswa,
-                    'nipd'           => $s->nipd,
-                    'jurusan'        => $s->jurusan ?? '-',
-                    'nilai_lama'     => $nilai?->nilai,
-                    'predikat_lama'  => $nilai?->predikat,
-                    'deskripsi_lama' => $nilai?->deskripsi,
-                ];
-            });
+            return [
+                'nama_siswa' => $s->nama_siswa,
+                'nipd' => $s->nipd,
+                'jurusan' => $s->jurusan ?? '-',
+                'nilai_lama' => $nilai?->nilai,
+                'predikat_lama' => $nilai?->predikat,
+                'deskripsi_lama' => $nilai?->deskripsi,
+            ];
+        });
 
         return response()->json($data);
     }
 
-    // -------------------------------------------------------
-    // POST /eskul/simpan — simpan / update nilai siswa
-    // -------------------------------------------------------
     public function simpan(Request $request)
     {
-        // ✅ FIX: eskul dari SESSION, bukan dari request body
-        $eskul = $this->getEskulFromSession();
         $kelas = $request->kelas;
+        $eskul = $request->eskul;
         $data  = $request->data;
 
-        if (!$kelas || empty($data)) {
-            return response()->json(['message' => 'Data tidak lengkap.'], 422);
-        }
+        $rekapModels = [
+            'pramuka'      => RekapPramuka::class,
+            'paskibra'     => RekapPaskibra::class,
+            'natbinari'    => RekapNatbinari::class,
+            'jurnal'       => RekapJurnal::class,
+            'marchingband' => RekapMarchingband::class,
+            'pmr'          => RekapPmr::class,
+        ];
 
-        $rekapModel = $this->rekapModels[$eskul] ?? null;
-
-        if (!$rekapModel) {
-            return response()->json(['message' => 'Eskul tidak dikenali.'], 400);
+        $model = $rekapModels[$eskul] ?? null;
+        if (!$model) {
+            return response()->json(['status' => 'eskul tidak dikenali'], 400);
         }
 
         $updated = 0;
         foreach ($data as $item) {
-            if (empty($item['nilai'])) continue;
+            if (empty($item['nilai'])) continue; // Skip yang kosong
 
-            $rekapModel::updateOrCreate(
-                [
-                    'nipd'  => $item['nipd'],
-                    'kelas' => $kelas,
-                ],
+            $model::updateOrCreate(
+                ['nipd' => $item['nipd'],  'kelas' => $kelas],
                 [
                     'nama_siswa' => $item['nama_siswa'],
                     'jurusan'    => $item['jurusan'] ?? '-',
@@ -149,10 +110,6 @@ class PenilaianController extends Controller
         }
 
         session(['sudah_nilai' => true]);
-
-        return response()->json([
-            'status'  => 'success',
-            'message' => "$updated data disimpan",
-        ]);
+        return response()->json(['status' => 'success', 'message' => "$updated data disimpan"]);
     }
 }
