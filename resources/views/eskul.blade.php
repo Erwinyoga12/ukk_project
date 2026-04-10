@@ -33,7 +33,6 @@ body { margin: 0; font-family: Inter, 'Segoe UI', sans-serif; background: var(--
     gap: 10px;
     pointer-events: none;
 }
-
 .toast-notif {
     display: flex;
     align-items: flex-start;
@@ -46,11 +45,9 @@ body { margin: 0; font-family: Inter, 'Segoe UI', sans-serif; background: var(--
     animation: toastIn .3s cubic-bezier(.21,1.02,.73,1) forwards;
     box-shadow: 0 4px 16px rgba(0,0,0,.08);
 }
-
 .toast-notif.hiding {
     animation: toastOut .25s ease forwards;
 }
-
 @keyframes toastIn {
     from { opacity: 0; transform: translateX(20px); }
     to   { opacity: 1; transform: translateX(0); }
@@ -59,33 +56,23 @@ body { margin: 0; font-family: Inter, 'Segoe UI', sans-serif; background: var(--
     from { opacity: 1; transform: translateX(0); }
     to   { opacity: 0; transform: translateX(20px); }
 }
-
-/* success */
 .toast-success { background: #EAF3DE; border-color: #97C459; }
 .toast-success .toast-title { color: #27500A; }
 .toast-success .toast-body  { color: #3B6D11; }
 .toast-success .toast-bar   { background: #639922; }
-
-/* error */
 .toast-error { background: #FCEBEB; border-color: #F09595; }
 .toast-error .toast-title { color: #791F1F; }
 .toast-error .toast-body  { color: #A32D2D; }
-
-/* loading */
 .toast-loading { background: #E6F1FB; border-color: #85B7EB; }
 .toast-loading .toast-title { color: #0C447C; }
 .toast-loading .toast-body  { color: #185FA5; }
-
 .toast-notif .t-icon { flex-shrink: 0; margin-top: 1px; }
 .toast-notif .t-content { flex: 1; min-width: 0; }
 .toast-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
 .toast-body  { font-size: 12px; line-height: 1.6; }
-
 .toast-bar-wrap { height: 3px; background: rgba(0,0,0,.08); border-radius: 2px; margin-top: 8px; overflow: hidden; }
 .toast-bar { height: 100%; border-radius: 2px; animation: shrinkBar 3s linear forwards; }
 @keyframes shrinkBar { from { width: 100%; } to { width: 0%; } }
-
-/* spinner untuk loading */
 .spin { animation: spin .8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 /* ========================================= */
@@ -251,6 +238,12 @@ async function confirmLogout() {
             method: "POST",
             headers: { "X-CSRF-TOKEN": csrfToken, "Accept": "application/json" }
         });
+
+        // Reset tabel dan pilihan kelas
+        document.getElementById("tabel_siswa").innerHTML =
+            `<tr><td colspan="7" class="text-center">Pilih kelas dahulu</td></tr>`;
+        document.getElementById("kelas").value = "";
+
         window.location.href = "/gin";
     } catch (e) {
         alert("Gagal logout");

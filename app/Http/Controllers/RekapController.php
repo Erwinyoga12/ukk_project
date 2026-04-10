@@ -25,30 +25,20 @@ class RekapController extends Controller
     {
         $eskul = session('eskul_login');
 
-        // ✅ FIX: tambah with('pesan', ...) supaya notif muncul di halaman login
         if (!$eskul) {
             return redirect('/gin')->with('pesan', 'Silakan login terlebih dahulu.');
         }
 
-        $model = $this->rekapModels[$eskul] ?? null;
-
-        // ✅ FIX: kalau eskul tidak dikenali, logout paksa daripada diam-diam error
-        if (!$model) {
-            session()->forget(['eskul_login', 'sudah_nilai']);
+        if (!isset($this->rekapModels[$eskul])) {
+            session()->forget(['eskul_login', 'sudah_nilai', 'rekap_sesi']);
             return redirect('/gin')->with('pesan', 'Sesi tidak valid. Silakan login kembali.');
         }
 
-        // Belum simpan nilai di sesi ini → tampilkan tabel kosong
-        if (!session('sudah_nilai')) {
-            return view('rkpPramuka', [
-                'data'  => collect(),
-                'eskul' => $eskul,
-            ]);
-        }
+        // ✅ Ambil dari session, bukan dari database
+        $dataSesi = session('rekap_sesi', []);
 
-        $data = $model::orderBy('kelas')
-                      ->orderBy('nama_siswa')
-                      ->get();
+        // ✅ Ubah ke collection supaya blade @forelse tetap bekerja
+        $data = collect($dataSesi)->map(fn($d) => (object) $d);
 
         return view('rkpPramuka', compact('data', 'eskul'));
     }
