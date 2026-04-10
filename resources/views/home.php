@@ -347,48 +347,6 @@
             </div>
         </div>
 
-        <div class="col-lg-4">
-            <div class="demo-card">
-                <img src="image/pencak.jpg">
-                <div class="label">ESKUL PENCAK SILAT</div>
-            </div>
-        </div>
-
-        <div class="col-lg-4">
-            <div class="demo-card">
-                <img src="image/tari.jpg">
-                <div class="label">ESKUL SENI TARI</div>
-            </div>
-        </div>
-
-        <div class="col-lg-4">
-            <div class="demo-card">
-                <img src="image/hadroh.jpg">
-                <div class="label">ESKUL HADROH</div>
-            </div>
-        </div>
-
-        <div class="col-lg-4">
-            <div class="demo-card">
-                <img src="image/bdmin.jpg">
-                <div class="label">ESKUL BADMINTON</div>
-            </div>
-        </div>
-
-        <div class="col-lg-4">
-            <div class="demo-card">
-                <img src="image/ftsl.jpg">
-                <div class="label">ESKUL FUTSAL</div>
-            </div>
-        </div>
-
-        <div class="col-lg-4">
-            <div class="demo-card">
-                <img src="image/vly.jpg">
-                <div class="label">ESKUL VOLY</div>
-            </div>
-        </div>
-
                 <!-- (lanjutkan semua card punyamu, tetap sama persis) -->
 
             </div>
@@ -403,24 +361,14 @@
                 <div class="col-md-3">
                     <h6>Company</h6>
                     <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/contak">Contact</a></li>
                     </ul>
                 </div>
-
-                <div class="col-md-3">
-                    <h6>Support</h6>
-                    <ul>
-                        <li><a href="#">FAQs</a></li>
-                        <li><a href="#">Help Center</a></li>
-                    </ul>
-                </div>
-
                 <div class="col-md-3">
                     <h6>Account</h6>
                     <ul>
-                        <li><a href="#">Register</a></li>
-                        <li><a href="#">Login</a></li>
+                        <li><a href="/gin">Login</a></li>
                     </ul>
                 </div>
 

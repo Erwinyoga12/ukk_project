@@ -128,28 +128,49 @@ body{
 
     <!-- FORM -->
     <div class="col-lg-7">
-        <div class="contact-form">
-            <h3 class="mb-4 fw-semibold">Kirim Pesan</h3>
-            <form>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" placeholder="Nama Lengkap">
-                    </div>
-                    <div class="col-md-6">
-                        <input type="email" class="form-control" placeholder="Email">
-                    </div>
-                </div>
+    <div class="contact-form">
+        <h3 class="mb-4 fw-semibold">Kirim Pesan</h3>
 
-                <div class="mb-4">
-                    <textarea rows="5" class="form-control" placeholder="Tulis pesan Anda..."></textarea>
-                </div>
+        {{-- Notifikasi sukses --}}
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show">
+                <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
 
-                <button type="submit" class="btn btn-send">
-                    <i class="bi bi-send-fill"></i> Kirim Pesan
-                </button>
-            </form>
-        </div>
+        <form action="{{ route('contact.store') }}" method="POST"> {{-- ← tambah action & method --}}
+            @csrf {{-- ← wajib ada! --}}
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <input type="text"
+                           name="nama_lengkap" {{-- ← tambah name --}}
+                           class="form-control"
+                           placeholder="Nama Lengkap"
+                           value="{{ old('nama_lengkap') }}">
+                </div>
+                <div class="col-md-6">
+                    <input type="email"
+                           name="email" {{-- ← tambah name --}}
+                           class="form-control"
+                           placeholder="Email"
+                           value="{{ old('email') }}">
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <textarea name="pesan" {{-- ← tambah name --}}
+                          rows="5"
+                          class="form-control"
+                          placeholder="Tulis pesan Anda...">{{ old('pesan') }}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-send">
+                <i class="bi bi-send-fill"></i> Kirim Pesan
+            </button>
+        </form>
     </div>
+</div>
 
     <!-- INFO -->
     <div class="col-lg-5">

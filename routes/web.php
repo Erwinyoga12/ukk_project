@@ -21,7 +21,6 @@ Route::get('/index',     [KegiatanController::class, 'index']);
 Route::get('/prestasi',  [KegiatanController::class, 'pres']);
 Route::get('/prmkrekap', [KegiatanController::class, 'rkpPramuka']);
 Route::get('/gotapramu', [KegiatanController::class, 'gotapramuka']);
-Route::get('/contak',    [KegiatanController::class, 'contak']);
 Route::get('/contact',   [ContactController::class,  'con'])->name('contact.index');
 Route::post('/contact',  [ContactController::class,  'store'])->name('contact.store');
 Route::get('/users',     [UserController::class,     'tambahdata']);
@@ -55,11 +54,13 @@ Route::get('/rekap',         [RekapController::class,     'index'])->name('rekap
 
 /* ============================================================
    LOGOUT ESKUL
-   ✅ Hanya hapus session — TIDAK hapus data dari database
+   ✅ Hapus semua session login
 ============================================================ */
 Route::post('/logout-eskul', function () {
-    session()->forget(['eskul_login', 'sudah_nilai']);
-    return response()->json(['status' => 'ok']);
+    session()->forget('eskul_login');
+    session()->forget('sudah_nilai');
+    session()->forget('rekap_sesi'); // ✅ hapus data rekap sesi
+    return response()->json(['success' => true]);
 });
 
 /* ============================================================
@@ -67,3 +68,7 @@ Route::post('/logout-eskul', function () {
 ============================================================ */
 Route::get('/', [KegiatanController::class, 'home']);
 
+<<<<<<< HEAD
+=======
+Route::get('/contak',    [KegiatanController::class, 'contak']);
+>>>>>>> d64206fad19734691e6d0cdfeba8e4e00c14dd76
