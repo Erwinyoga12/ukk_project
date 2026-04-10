@@ -59,15 +59,15 @@ class PenilaianController extends Controller
             $rekapModel = $rekapModels[$eskul] ?? null;
             $nilai = $rekapModel ? $rekapModel::where('nipd', $s->nipd)->where('kelas', $kelas)->first() : null;
 
-            return [
-                'nama_siswa' => $s->nama_siswa,
-                'nipd' => $s->nipd,
-                'jurusan' => $s->jurusan ?? '-',
-                'nilai_lama' => $nilai?->nilai,
-                'predikat_lama' => $nilai?->predikat,
-                'deskripsi_lama' => $nilai?->deskripsi,
-            ];
-        });
+                return [
+                    'nama_siswa'     => $s->nama_siswa,
+                    'nipd'           => $s->nipd,
+                    'jurusan'        => $s->jurusan ?? '-',
+                    'nilai_lama'     => $nilai?->nilai,
+                    'predikat_lama'  => $nilai?->predikat,
+                    'deskripsi_lama' => $nilai?->deskripsi,
+                ];
+            });
 
         return response()->json($data);
     }
