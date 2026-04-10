@@ -68,7 +68,5 @@ Route::post('/logout-eskul', function () {
 ============================================================ */
 Route::get('/', [KegiatanController::class, 'home']);
 
-<<<<<<< HEAD
-=======
 Route::get('/contak',    [KegiatanController::class, 'contak']);
->>>>>>> d64206fad19734691e6d0cdfeba8e4e00c14dd76
+
