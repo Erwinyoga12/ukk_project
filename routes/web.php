@@ -66,3 +66,4 @@ Route::post('/logout-eskul', function () {
    HOME
 ============================================================ */
 Route::get('/', [KegiatanController::class, 'home']);
+

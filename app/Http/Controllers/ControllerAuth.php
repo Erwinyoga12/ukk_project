@@ -19,7 +19,7 @@ class ControllerAuth extends Controller
             'password' => 'required|string',
         ]);
 
-        $input = strtolower($request->username);
+        $input    = strtolower($request->username);
         $password = $request->password;
 
         $user = User::where('email', $input)
@@ -29,9 +29,10 @@ class ControllerAuth extends Controller
         if ($user && Hash::check($password, $user->password)) {
             session([
                 'eskul_login' => $user->name,
-                'user_id' => $user->id,
-                'logged_in' => true
+                'user_id'     => $user->id,
+                'logged_in'   => true,
             ]);
+            session()->save(); // ← pastikan session tersimpan sebelum redirect
             return redirect('/eskul');
         }
 
