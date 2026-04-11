@@ -1,13 +1,16 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use App\Models\AnggotaPramuka;
 use App\Models\AnggotaNatbinari;
 use App\Models\AnggotaJurnal;
 use App\Models\AnggotaMarchingband;
 use App\Models\AnggotaPaskibra;
 use App\Models\AnggotaPmr;
+
 use App\Models\RekapPaskibra;
 use App\Models\RekapPramuka;
 use App\Models\RekapNatbinari;
@@ -17,6 +20,10 @@ use App\Models\RekapPmr;
 
 class PenilaianController extends Controller
 {
+    /* ======================================================
+       MAP MODEL
+    ====================================================== */
+
     private function anggotaMap(): array
     {
         return [
@@ -41,6 +48,10 @@ class PenilaianController extends Controller
         ];
     }
 
+    /* ======================================================
+       HALAMAN UTAMA
+    ====================================================== */
+
     public function index()
     {
         if (!session('logged_in')) {
@@ -53,29 +64,52 @@ class PenilaianController extends Controller
         return view('eskul', compact('eskul', 'kelasOptions'));
     }
 
+    /* ======================================================
+       LOAD DATA (INI YANG PALING PENTING 🔥)
+       → ambil anggota + gabung rekap
+       → bikin otomatis locked kalau nilai ada
+    ====================================================== */
+
     public function data(Request $request)
     {
         $eskul = strtolower($request->eskul);
         $kelas = $request->kelas;
 
         $anggotaModel = $this->anggotaMap()[$eskul] ?? null;
-        if (!$anggotaModel) return response()->json([]);
+        $rekapModel   = $this->rekapMap()[$eskul] ?? null;
 
-        $data = $anggotaModel::where('kelas', $kelas)
-            ->get()
-            ->map(function ($s) {
-                return [
-                    'nama_siswa'     => $s->nama_siswa,
-                    'nipd'           => $s->nipd,
-                    'jurusan'        => $s->jurusan ?? '-',
-                    'nilai_lama'     => null,
-                    'predikat_lama'  => null,
-                    'deskripsi_lama' => null,
-                ];
-            });
+        if (!$anggotaModel || !$rekapModel) {
+            return response()->json([]);
+        }
+
+        // ambil data siswa
+        $anggota = $anggotaModel::where('kelas', $kelas)->get();
+
+        // ambil data nilai (rekap)
+        $rekap = $rekapModel::where('kelas', $kelas)->get()->keyBy('nipd');
+
+        $data = $anggota->map(function ($s) use ($rekap) {
+
+            $nilai = $rekap[$s->nipd] ?? null;
+
+            return [
+                'nama_siswa'     => $s->nama_siswa,
+                'nipd'           => $s->nipd,
+                'jurusan'        => $s->jurusan ?? '-',
+
+                // 🔥 ini yang bikin persist setelah login
+                'nilai_lama'     => $nilai?->nilai,
+                'predikat_lama'  => $nilai?->predikat,
+                'deskripsi_lama' => $nilai?->deskripsi,
+            ];
+        });
 
         return response()->json($data);
     }
+
+    /* ======================================================
+       SIMPAN SEMUA
+    ====================================================== */
 
     public function simpan(Request $request)
     {
@@ -84,18 +118,22 @@ class PenilaianController extends Controller
         $data  = $request->data;
 
         $rekapModel = $this->rekapMap()[$eskul] ?? null;
+
         if (!$rekapModel) {
             return response()->json(['status' => 'eskul tidak dikenali'], 400);
         }
 
         $updated = 0;
-        $dataSesi = session('rekap_sesi', []); // ✅ ambil data sesi yang sudah ada
 
         foreach ($data as $item) {
+
             if (empty($item['nilai'])) continue;
 
             $rekapModel::updateOrCreate(
-                ['nipd' => $item['nipd'], 'kelas' => $kelas],
+                [
+                    'nipd'  => $item['nipd'],
+                    'kelas' => $kelas
+                ],
                 [
                     'nama_siswa' => $item['nama_siswa'],
                     'jurusan'    => $item['jurusan'] ?? '-',
@@ -105,25 +143,43 @@ class PenilaianController extends Controller
                 ]
             );
 
-            // ✅ Simpan data yang diinput ke session
-            $dataSesi[] = [
-                'nama_siswa' => $item['nama_siswa'],
-                'nipd'       => $item['nipd'],
-                'kelas'      => $kelas,
-                'jurusan'    => $item['jurusan'] ?? '-',
-                'nilai'      => $item['nilai'],
-                'predikat'   => $item['predikat'],
-                'deskripsi'  => $item['deskripsi'] ?? null,
-            ];
-
             $updated++;
         }
 
-        session([
-            'sudah_nilai' => true,
-            'rekap_sesi'  => $dataSesi, // ✅ simpan ke session
+        return response()->json([
+            'status'  => 'success',
+            'message' => "$updated data disimpan"
         ]);
+    }
 
-        return response()->json(['status' => 'success', 'message' => "$updated data disimpan"]);
+    /* ======================================================
+       SIMPAN PER BARIS (BIAR EDIT LANGSUNG KE DB 🔥)
+    ====================================================== */
+
+    public function simpanBaris(Request $request)
+    {
+        $eskul = strtolower($request->eskul);
+
+        $rekapModel = $this->rekapMap()[$eskul] ?? null;
+
+        if (!$rekapModel) {
+            return response()->json(['status' => 'error'], 400);
+        }
+
+        $rekapModel::updateOrCreate(
+            [
+                'nipd'  => $request->nipd,
+                'kelas' => $request->kelas
+            ],
+            [
+                'nama_siswa' => $request->nama_siswa,
+                'jurusan'    => $request->jurusan ?? '-',
+                'nilai'      => $request->nilai,
+                'predikat'   => $request->predikat,
+                'deskripsi'  => $request->deskripsi ?? null,
+            ]
+        );
+
+        return response()->json(['status' => 'success']);
     }
 }

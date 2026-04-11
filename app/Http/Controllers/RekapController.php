@@ -30,16 +30,36 @@ class RekapController extends Controller
         }
 
         if (!isset($this->rekapModels[$eskul])) {
-            session()->forget(['eskul_login', 'sudah_nilai', 'rekap_sesi']);
-            return redirect('/gin')->with('pesan', 'Sesi tidak valid. Silakan login kembali.');
+            session()->forget(['eskul_login', 'sudah_nilai']);
+            return redirect('/gin')->with('pesan', 'Sesi tidak valid.');
         }
 
-        // ✅ Ambil dari session, bukan dari database
-        $dataSesi = session('rekap_sesi', []);
+        // ✅ Ambil model sesuai eskul
+        $model = $this->rekapModels[$eskul];
 
-        // ✅ Ubah ke collection supaya blade @forelse tetap bekerja
-        $data = collect($dataSesi)->map(fn($d) => (object) $d);
+        // ✅ Ambil data dari database
+        $data = $model::orderBy('nama_siswa')->get();
 
         return view('rkpPramuka', compact('data', 'eskul'));
+    }
+
+    // 🔥 SIMPAN DATA NILAI KE DATABASE
+    public function store(Request $request)
+    {
+        $eskul = session('eskul_login');
+
+        $model = $this->rekapModels[$eskul];
+
+        $model::create([
+            'nama_siswa' => $request->nama_siswa,
+            'nipd'       => $request->nipd,
+            'kelas'      => $request->kelas,
+            'jurusan'    => $request->jurusan,
+            'nilai'      => $request->nilai,
+            'predikat'   => $request->predikat,
+            'deskripsi'  => $request->deskripsi,
+        ]);
+
+        return back()->with('success', 'Data berhasil disimpan');
     }
 }

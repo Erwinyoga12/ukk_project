@@ -50,7 +50,7 @@ Route::post('/cek_user', [ControllerAuth::class, 'login'])->name('login.process'
 Route::get('/eskul',         [PenilaianController::class, 'index']);
 Route::get('/eskul/data',    [PenilaianController::class, 'data']);
 Route::post('/eskul/simpan', [PenilaianController::class, 'simpan']);
-Route::get('/rekap',         [RekapController::class,     'index'])->name('rekap.index');
+Route::get('/rekap', [RekapController::class, 'index']);
 
 /* ============================================================
    LOGOUT ESKUL
