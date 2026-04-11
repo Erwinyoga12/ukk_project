@@ -59,7 +59,6 @@ Route::get('/rekap',         [RekapController::class,     'index'])->name('rekap
 Route::post('/logout-eskul', function () {
     session()->forget('eskul_login');
     session()->forget('sudah_nilai');
-    session()->forget('rekap_sesi'); // ✅ hapus data rekap sesi
     return response()->json(['success' => true]);
 });
 
@@ -69,4 +68,3 @@ Route::post('/logout-eskul', function () {
 Route::get('/', [KegiatanController::class, 'home']);
 
 Route::get('/contak',    [KegiatanController::class, 'contak']);
-
