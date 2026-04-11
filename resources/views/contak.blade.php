@@ -23,7 +23,7 @@ body{
 /* HERO */
 .contact-hero{
     background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-    url('https://images.unsplash.com/photo-1521791136064-7986c2920216');
+    url('{{ asset('image/mpls2024.jpg') }}') no-repeat;
     background-size: cover;
     background-position: center;
     padding: 100px 0;
