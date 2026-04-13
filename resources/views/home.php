@@ -466,13 +466,12 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="pembina-card">
                         <!-- Avatar inisial -->
-                        <div class="pembina-avatar" style="background:#E1F5EE;color:#0F6E56;">AR</div>
+                        <div class="pembina-avatar" style="background:#E1F5EE;color:#0F6E56;">KA</div>
                         <!-- Badge eskul -->
                         <span class="eskul-badge" style="background:#E1F5EE;color:#0F6E56;">PASKIBRA</span>
                         <!-- Nama & jabatan -->
-                        <p class="pembina-name">Ahmad Ridwan, S.Pd</p>
+                        <p class="pembina-name">Kang Acang</p>
                         <p class="pembina-jabatan">Pembina Paskibra</p>
-                        <p class="pembina-nip">NIP: 198503142010011002</p>
 
                         <hr class="pembina-divider">
 
@@ -493,7 +492,7 @@
                             </div>
                             <div>
                                 <span class="info-label">Email</span>
-                                <span class="info-value">a.ridwan@sekolah.sch.id</span>
+                                <span class="info-value">acang@gmail.com</span>
                             </div>
                         </div>
                         <!-- Alamat -->
@@ -503,7 +502,7 @@
                             </div>
                             <div>
                                 <span class="info-label">Alamat</span>
-                                <span class="info-value">Jl. Merdeka No. 12, Kec. Menteng, Jakarta Pusat</span>
+                                <span class="info-value">Jl. Lumpang No. 12, Kec. Parung Panjang</span>
                             </div>
                         </div>
                     </div>
@@ -512,11 +511,10 @@
                 <!-- ===== PEMBINA 2 — PRAMUKA ===== -->
                 <div class="col-lg-4 col-md-6">
                     <div class="pembina-card">
-                        <div class="pembina-avatar" style="background:#E6F1FB;color:#185FA5;">SW</div>
+                        <div class="pembina-avatar" style="background:#E6F1FB;color:#185FA5;">H</div>
                         <span class="eskul-badge" style="background:#E6F1FB;color:#185FA5;">PRAMUKA</span>
-                        <p class="pembina-name">Siti Wahyuni, M.Pd</p>
+                        <p class="pembina-name">Haerudin</p>
                         <p class="pembina-jabatan">Pembina Pramuka</p>
-                        <p class="pembina-nip">NIP: 197912052005012005</p>
 
                         <hr class="pembina-divider">
 
@@ -535,7 +533,7 @@
                             </div>
                             <div>
                                 <span class="info-label">Email</span>
-                                <span class="info-value">s.wahyuni@sekolah.sch.id</span>
+                                <span class="info-value">haerudin@gmail.com</span>
                             </div>
                         </div>
                         <div class="pembina-info-row">
@@ -544,7 +542,7 @@
                             </div>
                             <div>
                                 <span class="info-label">Alamat</span>
-                                <span class="info-value">Jl. Sudirman No. 45, Kec. Tanah Abang, Jakarta Pusat</span>
+                                <span class="info-value">Jl. Kebasiran No. 45, Kec. Parung Panjang</span>
                             </div>
                         </div>
                     </div>
@@ -553,11 +551,10 @@
                 <!-- ===== PEMBINA 3 — PMR ===== -->
                 <div class="col-lg-4 col-md-6">
                     <div class="pembina-card">
-                        <div class="pembina-avatar" style="background:#FAECE7;color:#993C1D;">DN</div>
+                        <div class="pembina-avatar" style="background:#FAECE7;color:#993C1D;">CM</div>
                         <span class="eskul-badge" style="background:#FAECE7;color:#993C1D;">PMR</span>
-                        <p class="pembina-name">Deni Nugroho, S.Kep</p>
+                        <p class="pembina-name">Ade Cucu Mulyana</p>
                         <p class="pembina-jabatan">Pembina PMR</p>
-                        <p class="pembina-nip">NIP: 199001102015031003</p>
 
                         <hr class="pembina-divider">
 
@@ -576,7 +573,7 @@
                             </div>
                             <div>
                                 <span class="info-label">Email</span>
-                                <span class="info-value">d.nugroho@sekolah.sch.id</span>
+                                <span class="info-value">adecucumulyana@gmail.com</span>
                             </div>
                         </div>
                         <div class="pembina-info-row">
@@ -585,7 +582,7 @@
                             </div>
                             <div>
                                 <span class="info-label">Alamat</span>
-                                <span class="info-value">Jl. Kebon Jeruk No. 8, Kec. Palmerah, Jakarta Barat</span>
+                                <span class="info-value">Griya Parung Panjang Blok A No. 8, Kec. Parung Panjang</span>
                             </div>
                         </div>
                     </div>
@@ -594,11 +591,10 @@
                 <!-- ===== PEMBINA 4 — DRUMBAND ===== -->
                 <div class="col-lg-4 col-md-6">
                     <div class="pembina-card">
-                        <div class="pembina-avatar" style="background:#EEEDFE;color:#534AB7;">RL</div>
+                        <div class="pembina-avatar" style="background:#EEEDFE;color:#534AB7;">RN</div>
                         <span class="eskul-badge" style="background:#EEEDFE;color:#534AB7;">DRUMBAND</span>
-                        <p class="pembina-name">Rina Lestari, S.Sn</p>
+                        <p class="pembina-name">Reza Nugraha</p>
                         <p class="pembina-jabatan">Pembina Drumband</p>
-                        <p class="pembina-nip">NIP: 198807232012012007</p>
 
                         <hr class="pembina-divider">
 
@@ -617,7 +613,7 @@
                             </div>
                             <div>
                                 <span class="info-label">Email</span>
-                                <span class="info-value">r.lestari@sekolah.sch.id</span>
+                                <span class="info-value">Reza@gmail.com</span>
                             </div>
                         </div>
                         <div class="pembina-info-row">
@@ -626,7 +622,7 @@
                             </div>
                             <div>
                                 <span class="info-label">Alamat</span>
-                                <span class="info-value">Jl. Raya Bogor No. 77, Kec. Ciracas, Jakarta Timur</span>
+                                <span class="info-value">Perum 2 Jl. Semangka No. 77, Kec. Parung Panjang</span>
                             </div>
                         </div>
                     </div>
@@ -635,11 +631,10 @@
                 <!-- ===== PEMBINA 5 — NATBINARI ===== -->
                 <div class="col-lg-4 col-md-6">
                     <div class="pembina-card">
-                        <div class="pembina-avatar" style="background:#FAEEDA;color:#854F0B;">BH</div>
+                        <div class="pembina-avatar" style="background:#FAEEDA;color:#854F0B;">KD</div>
                         <span class="eskul-badge" style="background:#FAEEDA;color:#854F0B;">NATBINARI</span>
-                        <p class="pembina-name">Budi Hartono, S.Kom</p>
+                        <p class="pembina-name">Kang Dono</p>
                         <p class="pembina-jabatan">Pembina Natbinari</p>
-                        <p class="pembina-nip">NIP: 198204172008011009</p>
 
                         <hr class="pembina-divider">
 
@@ -658,7 +653,7 @@
                             </div>
                             <div>
                                 <span class="info-label">Email</span>
-                                <span class="info-value">b.hartono@sekolah.sch.id</span>
+                                <span class="info-value">dono@gmail.com</span>
                             </div>
                         </div>
                         <div class="pembina-info-row">
@@ -667,7 +662,7 @@
                             </div>
                             <div>
                                 <span class="info-label">Alamat</span>
-                                <span class="info-value">Jl. Fatmawati No. 33, Kec. Cilandak, Jakarta Selatan</span>
+                                <span class="info-value">Griya Parung Panjang Blok L No. 33, Kec. Parung Panjang</span>
                             </div>
                         </div>
                     </div>
@@ -676,11 +671,10 @@
                 <!-- ===== PEMBINA 6 — JURNALISTIK ===== -->
                 <div class="col-lg-4 col-md-6">
                     <div class="pembina-card">
-                        <div class="pembina-avatar" style="background:#FBEAF0;color:#993556;">FA</div>
+                        <div class="pembina-avatar" style="background:#FBEAF0;color:#993556;">K</div>
                         <span class="eskul-badge" style="background:#FBEAF0;color:#993556;">JURNALISTIK</span>
-                        <p class="pembina-name">Fitri Andriani, S.I.Kom</p>
+                        <p class="pembina-name">Komar S.Kom</p>
                         <p class="pembina-jabatan">Pembina Jurnalistik</p>
-                        <p class="pembina-nip">NIP: 199305282017012004</p>
 
                         <hr class="pembina-divider">
 
@@ -699,7 +693,7 @@
                             </div>
                             <div>
                                 <span class="info-label">Email</span>
-                                <span class="info-value">f.andriani@sekolah.sch.id</span>
+                                <span class="info-value">komar@gmail.com</span>
                             </div>
                         </div>
                         <div class="pembina-info-row">

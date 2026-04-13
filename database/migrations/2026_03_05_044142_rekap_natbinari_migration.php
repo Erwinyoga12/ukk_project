@@ -14,14 +14,14 @@ class RekapNatbinariMigration extends Migration
     public function up()
     {
     Schema::create('rekap_natbinari', function (Blueprint $table) {
-            $table->id();
+          $table->id();
             $table->string('nama_siswa');
             $table->string('nipd');
             $table->string('kelas');
             $table->string('jurusan');
-            $table->string('eskul');
             $table->string('nilai');
-            $table->string('keterangan');
+            $table->string('predikat');
+            $table->string('deskripsi');
             $table->timestamps();
         });  
     }

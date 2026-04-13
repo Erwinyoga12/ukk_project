@@ -19,9 +19,9 @@ class RekapPmrMigration extends Migration
             $table->string('nipd');
             $table->string('kelas');
             $table->string('jurusan');
-            $table->string('eskul');
             $table->string('nilai');
-            $table->string('keterangan');
+            $table->string('predikat');
+            $table->string('deskripsi');
             $table->timestamps();
         });  
     }
