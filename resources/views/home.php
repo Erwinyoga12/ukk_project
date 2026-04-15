@@ -483,7 +483,7 @@
                             </li>
                             <li><hr class="dropdown-divider mx-2 my-1"></li>
                             <li>
-                                <a class="dropdown-item" href="/gin?role=kesiswaan">
+                                <a class="dropdown-item" href="/kesiswaan/login">
                                     <div class="di-icon" style="background:#E1F5EE;color:#0F6E56;">
                                         <i class="fas fa-layer-group"></i>
                                     </div>

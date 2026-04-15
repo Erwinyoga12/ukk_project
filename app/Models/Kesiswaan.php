@@ -2,20 +2,24 @@
 
 namespace App\Models;
 
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
-class Kesiswaan extends Model
+class Kesiswaan extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
-protected $fillable = [
+    protected $table = 'kesiswaans';
+
+    protected $fillable = [
         'nama',
         'email',
-        'password'
+        'password',
     ];
 
     protected $hidden = [
-        'password'
+        'password',
+        'remember_token',
     ];
 }

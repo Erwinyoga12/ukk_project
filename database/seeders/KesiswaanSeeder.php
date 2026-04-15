@@ -38,6 +38,6 @@ class KesiswaanSeeder extends Seeder
             );
         }
 
-        $this->command->info('✅ Seeder Kesiswaan (Users) berhasil dijalankan!');
+        $this->command->info('✅ Seeder Kesiswaan berhasil dijalankan!');
     }
 }
