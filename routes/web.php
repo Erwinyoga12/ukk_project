@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\RekapController;
+use App\Http\Controllers\AuthKesiswaanController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -25,8 +26,6 @@ Route::get('/contact',   [ContactController::class,  'con'])->name('contact.inde
 Route::post('/contact',  [ContactController::class,  'store'])->name('contact.store');
 Route::get('/users',     [UserController::class,     'tambahdata']);
 Route::get('/dashboard', [AdControlller::class,      'dash'])->name('dashboard');
-Route::get('/customer',  [CustomerController::class, 'cus'])->name('customer.cus');
-Route::post('/customer', [CustomerController::class, 'store'])->name('customer.store');
 Route::get('/product',   [ProductController::class,  'pro'])->name('product.pro');
 Route::post('/product',  [ProductController::class,  'store'])->name('product.store');
 
