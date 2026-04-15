@@ -20,7 +20,7 @@ class AnggotaNatbinariMigration extends Migration
             $table->string('kelas');
             $table->string('jurusan');
             $table->timestamps();
-        });  
+        });
     }
 
     /**
