@@ -74,22 +74,6 @@ Route::get('/contak', [KegiatanController::class, 'contak']);
 ============================================================ */
 Route::prefix('kesiswaan')->name('kesiswaan.')->group(function () {
 
-    Route::get('/login', [AuthKesiswaanController::class, 'showLoginForm'])
-        ->name('login');
-
-    Route::post('/login', [AuthKesiswaanController::class, 'login'])
-        ->name('login.process');
-
-    Route::middleware('auth:kesiswaan')->group(function () {
-        Route::post('/logout', [AuthKesiswaanController::class, 'logout'])
-            ->name('logout');
-
-   Route::get('/dashboard', [AuthKesiswaanController::class, 'dashboard'])
-            ->name('dashboard');
-
-    });
-});
-
     // Guest only — kalau sudah login redirect ke dashboard
     Route::middleware('guest:kesiswaan')->group(function () {
         Route::get('/login',  [AuthKesiswaanController::class, 'showLoginForm'])->name('login');
@@ -100,5 +84,5 @@ Route::prefix('kesiswaan')->name('kesiswaan.')->group(function () {
     Route::middleware('auth:kesiswaan')->group(function () {
         Route::post('/logout',   [AuthKesiswaanController::class, 'logout'])->name('logout');
         Route::get('/dashboard', [AuthKesiswaanController::class, 'dashboard'])->name('dashboard');
+    });
 });
-
