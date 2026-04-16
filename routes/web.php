@@ -85,6 +85,6 @@ Route::prefix('kesiswaan')->name('kesiswaan.')->group(function () {
 
    Route::get('/dashboard', [AuthKesiswaanController::class, 'dashboard'])
             ->name('dashboard');
-        
+
     });
 });
