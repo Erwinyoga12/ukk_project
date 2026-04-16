@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 
 // ================= CONTROLLER =================
@@ -34,9 +35,9 @@ Route::post('/product',  [ProductController::class,  'store'])->name('product.st
 
 
 /* ============================================================
-   ROUTE AUTH / LOGIN LAMA
+   ROUTE AUTH / LOGIN LAMA (Pembina)
 ============================================================ */
-Route::get('/gin', fn() => view('gin'))->name('gin');
+Route::get('/gin',  fn() => view('gin'))->name('gin');
 Route::post('/gin', [ControllerAuth::class, 'login'])->name('gin.login');
 Route::post('/cek_user', [ControllerAuth::class, 'login'])->name('login.process');
 
@@ -73,18 +74,16 @@ Route::get('/contak', [KegiatanController::class, 'contak']);
 ============================================================ */
 Route::prefix('kesiswaan')->name('kesiswaan.')->group(function () {
 
-    Route::get('/login', [AuthKesiswaanController::class, 'showLoginForm'])
-        ->name('login');
-
-    Route::post('/login', [AuthKesiswaanController::class, 'login'])
-        ->name('login.process');
-
-    Route::middleware('auth:kesiswaan')->group(function () {
-        Route::post('/logout', [AuthKesiswaanController::class, 'logout'])
-            ->name('logout');
-
-   Route::get('/dashboard', [AuthKesiswaanController::class, 'dashboard'])
-            ->name('dashboard');
-        
+    // Guest only — kalau sudah login redirect ke dashboard
+    Route::middleware('guest:kesiswaan')->group(function () {
+        Route::get('/login',  [AuthKesiswaanController::class, 'showLoginForm'])->name('login');
+        Route::post('/login', [AuthKesiswaanController::class, 'login'])->name('login.process');
     });
+
+    // Auth only — kalau belum login redirect ke /kesiswaan/login
+    Route::middleware('auth:kesiswaan')->group(function () {
+        Route::post('/logout',   [AuthKesiswaanController::class, 'logout'])->name('logout');
+        Route::get('/dashboard', [AuthKesiswaanController::class, 'dashboard'])->name('dashboard');
+    });
+
 });

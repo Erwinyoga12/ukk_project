@@ -506,6 +506,7 @@
         <div class="container">
             <h1>Penilaian Ekstrakurikuler</h1>
             <p>Platform profesional untuk mengelola kegiatan dan penilaian ekstrakurikuler siswa.</p>
+        </div>
     </section>
 
     <!-- ESKUL -->
