@@ -2,56 +2,68 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthKesiswaanController extends Controller
 {
-    protected string $guard = 'kesiswaan';
-
+    /**
+     * Tampilkan form login.
+     * Kalau sudah login → langsung ke dashboard.
+     */
     public function showLoginForm()
     {
-        if (Auth::guard($this->guard)->check()) {
+        if (Auth::guard('kesiswaan')->check()) {
             return redirect()->route('kesiswaan.dashboard');
         }
 
-        return view('login');
+        return view('kesiswaan.login');
     }
 
+    /**
+     * Proses login.
+     */
     public function login(Request $request)
     {
-        $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required|min:6',
+        $credentials = $request->validate([
+            'email'    => ['required', 'email'],
+            'password' => ['required', 'min:6'],
         ]);
 
-        if (Auth::guard($this->guard)->attempt(
-            $request->only('email', 'password'),
-            $request->boolean('remember')
-        )) {
-            $request->session()->regenerate();
+        $remember = $request->boolean('remember');
 
-            return redirect()->route('dashboard');
+        if (!Auth::guard('kesiswaan')->attempt($credentials, $remember)) {
+            return back()
+                ->withErrors(['email' => 'Email atau password salah.'])
+                ->onlyInput('email');
         }
 
-        return back()->withErrors([
-            'email' => 'Email atau password salah.',
-        ])->onlyInput('email');
+        $request->session()->regenerate();
+
+        return redirect()->intended(route('kesiswaan.dashboard'));
     }
 
+    /**
+     * Logout.
+     */
     public function logout(Request $request)
     {
-        Auth::guard($this->guard)->logout();
+        Auth::guard('kesiswaan')->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('kesiswaan.login')->with('success', 'Berhasil keluar.');
+        return redirect()->route('kesiswaan.login')
+            ->with('success', 'Berhasil keluar. Sampai jumpa!');
     }
 
+    /**
+     * Dashboard — dijaga middleware auth:kesiswaan di web.php.
+     */
     public function dashboard()
     {
-       return view('dashboard');
+        $user = Auth::guard('kesiswaan')->user();
+
+        return view('kesiswaan.dashboard', compact('user'));
     }
 }
