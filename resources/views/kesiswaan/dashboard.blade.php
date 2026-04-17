@@ -523,9 +523,12 @@
           <select class="filter-select" id="filterJurusan" onchange="filterTable()">
             <option value="">Semua Jurusan</option>
             <option>RPL</option>
-            <option>TKJ</option>
             <option>DKV</option>
-            <option>BIDI</option>
+            <option>TKJ 1</option>
+            <option>TKJ 2</option>
+            <option>BIDI 1</option>
+            <option>BIDI 2</option>
+            <option>BIDI 3</option>
           </select>
           <select class="filter-select" id="filterEskul" onchange="filterTable()">
             <option value="">Semua Status</option>
@@ -675,7 +678,7 @@
           <label class="form-label">Kelas <span>*</span></label>
           <select class="form-select" id="f-kelas">
             <option value="">-- Pilih Kelas --</option>
-            <option>X</option><option>XI</option><option>XII</option>
+            <option>X</option><option>XI</option>
           </select>
           <div class="form-error" id="err-kelas"></div>
         </div>
@@ -684,9 +687,12 @@
           <select class="form-select" id="f-jurusan">
             <option value="">-- Pilih Jurusan --</option>
             <option value="RPL">RPL</option>
-            <option value="TKJ">TKJ</option>
             <option value="DKV">DKV</option>
-            <option value="BIDI">BIDI</option>
+            <option value="TKJ 1">TKJ 1</option>
+            <option value="TKJ 2">TKJ 2</option>
+            <option value="BIDI 1">BIDI 1</option>
+            <option value="BIDI 2">BIDI 2</option>
+            <option value="BIDI 3">BIDI 3</option>
           </select>
           <div class="form-error" id="err-jurusan"></div>
         </div>
@@ -818,7 +824,7 @@ function filterTable() {
 /* ── RENDER TABLE ── */
 function renderTable() {
   const allRows = document.querySelectorAll('#siswaBody tr[data-nama]');
-  
+
   // sembunyikan semua dulu
   allRows.forEach(r => r.style.display = 'none');
 

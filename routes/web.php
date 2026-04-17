@@ -51,7 +51,7 @@ Route::get('/eskul/data',    [PenilaianController::class, 'data']);
 Route::post('/eskul/simpan', [PenilaianController::class, 'simpan']);
 
 Route::get('/rekap', [RekapController::class, 'index']);
-
+Route::get('/rekap/data', [RekapController::class, 'getData']);
 
 /* ============================================================
    LOGOUT ESKUL (custom session)
