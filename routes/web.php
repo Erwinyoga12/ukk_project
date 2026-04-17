@@ -13,6 +13,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\RekapController;
 use App\Http\Controllers\AuthKesiswaanController;
+use App\Http\Controllers\SiswaController;
 
 
 /* ============================================================
@@ -74,16 +75,25 @@ Route::get('/contak', [KegiatanController::class, 'contak']);
 ============================================================ */
 Route::prefix('kesiswaan')->name('kesiswaan.')->group(function () {
 
-    // Guest only — kalau sudah login redirect ke dashboard
+    // Guest only
     Route::middleware('guest:kesiswaan')->group(function () {
         Route::get('/login',  [AuthKesiswaanController::class, 'showLoginForm'])->name('login');
         Route::post('/login', [AuthKesiswaanController::class, 'login'])->name('login.process');
     });
 
-    // Auth only — kalau belum login redirect ke /kesiswaan/login
+    // Auth only
     Route::middleware('auth:kesiswaan')->group(function () {
-        Route::post('/logout',   [AuthKesiswaanController::class, 'logout'])->name('logout');
+        Route::post('/logout', [AuthKesiswaanController::class, 'logout'])->name('logout');
+
+        // Dashboard
         Route::get('/dashboard', [AuthKesiswaanController::class, 'dashboard'])->name('dashboard');
+
+        // ✅ CRUD Siswa — semua di dalam group ini, TIDAK ada duplikat di luar
+        Route::post('/siswa',            [SiswaController::class, 'store'])->name('siswa.store');
+        Route::post('/siswa/{id}/eskul', [SiswaController::class, 'updateEskul'])->name('siswa.updateEskul');
+        Route::delete('/siswa/{id}',     [SiswaController::class, 'destroy'])->name('siswa.destroy');
     });
 });
 
+// ✅ HAPUS route duplikat yang ada di luar group (sudah tidak diperlukan)
+// Route::post('/kesiswaan/siswa', ...) ← DIHAPUS
