@@ -58,12 +58,11 @@ class AuthKesiswaanController extends Controller
     }
 
     /**
-     * Dashboard — dijaga middleware auth:kesiswaan di web.php.
+     * Dashboard — delegate ke SiswaController@index
+     * agar logika data tetap di controller yang tepat.
      */
     public function dashboard()
     {
-        $user = Auth::guard('kesiswaan')->user();
-
-        return view('kesiswaan.dashboard', compact('user'));
+        return app(SiswaController::class)->index();
     }
 }

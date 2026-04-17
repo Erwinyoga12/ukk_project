@@ -16,10 +16,10 @@ class CreateSiswa extends Migration
         Schema::create('siswa', function (Blueprint $table) {
             $table->id();
             $table->string('nipd');
-            $table->string('nama siswa');
+            $table->string('nama_siswa');
+            $table->string('kelas');
+            $table->string('jurusan');
             $table->string('jenis_kelamin');
-            $table->string('gmail');
-            $table->string('no_telp');
             $table->timestamps();
         });
     }
